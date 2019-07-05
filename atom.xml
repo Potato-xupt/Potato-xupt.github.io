@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-07-05T12:59:14.515Z</updated>
+  <updated>2019-07-05T13:00:36.306Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://yoursite.com/posts/28814/"/>
     <id>http://yoursite.com/posts/28814/</id>
     <published>2019-07-05T12:09:07.000Z</published>
-    <updated>2019-07-05T12:59:14.515Z</updated>
+    <updated>2019-07-05T13:00:36.306Z</updated>
     
     <content type="html"><![CDATA[<hr><p>this is my first blog !<br>let us see that！</p>]]></content>
     
@@ -37,8 +37,6 @@
     </summary>
     
       <category term="测试" scheme="http://yoursite.com/categories/%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="云服务器" scheme="http://yoursite.com/categories/%E6%B5%8B%E8%AF%95/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
     
     
   </entry>
