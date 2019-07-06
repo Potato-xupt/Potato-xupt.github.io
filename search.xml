@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[测试微信二维码]]></title>
+    <url>%2Fposts%2F8304%2F</url>
+    <content type="text"><![CDATA[测试生成！]]></content>
+      <categories>
+        <category>测试</category>
+      </categories>
+  </entry>
+  <entry>
     <title><![CDATA[开启第一篇博客]]></title>
     <url>%2Fposts%2F28814%2F</url>
     <content type="text"><![CDATA[This is my first blog !Let us see that！ 第一次修改 于：2019/7/6 12:28:29 第二次修改，测试修改图片是否生效。 于：2019/7/6 12:46:52]]></content>
