@@ -70,7 +70,7 @@
     root: '/',
     scheme: 'Pisces',
     version: '7.2.0',
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    sidebar: {"position":"left","width":250,"display":"post","offset":12,"onmobile":true,"dimmer":true},
     back2top: true,
     back2top_sidebar: false,
     fancybox: false,
@@ -543,6 +543,10 @@
           
 
   
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
 
 
 
@@ -670,6 +674,8 @@
     </div>
   </aside>
   
+    <div id="sidebar-dimmer"></div>
+  
 
 
         
@@ -682,7 +688,7 @@
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">Potato</span>
+  <span class="author" itemprop="copyrightHolder">true</span>
 
   
 
@@ -823,6 +829,35 @@
 
   
 
+
+  
+    
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '9b0c87d3c176c7c8ae2f',
+    clientSecret: 'c1a521ad426a42ab0a65b5d65a33e27303274435',
+    repo: 'comments',
+    owner: 'Potato-xupt',
+    admin: ['Potato-xupt'],
+    id: md5(location.pathname),
+    
+      language: window.navigator.language || window.navigator.userLanguage,
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
 
   
 

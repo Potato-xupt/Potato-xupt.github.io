@@ -1670,11 +1670,6 @@ pre .javascript .function {
   color: #eee;
   border-bottom-color: #eee;
 }
-@media (max-width: 991px) {
-  .sidebar {
-    display: none;
-  }
-}
 .sidebar-inner {
   position: relative;
   padding: 20px 10px;
@@ -1718,7 +1713,6 @@ pre .javascript .function {
   .sidebar-toggle {
     opacity: 0.8;
     right: 20px;
-    display: none;
   }
 }
 .sidebar-toggle-line {
@@ -1781,7 +1775,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #284fd0;
+  background: #03ffcb;
 }
 .feed-link,
 .chat {
@@ -1958,6 +1952,25 @@ pre .javascript .function {
 .post-toc .nav .active-current > a:hover {
   color: #fc6423;
 }
+.sidebar-active + #sidebar-dimmer {
+  transform: translateX(-100%);
+}
+@media (max-width: 767px) {
+  .sidebar-active + #sidebar-dimmer {
+    opacity: 0.7;
+    transition: opacity 0.5s;
+  }
+}
+#sidebar-dimmer {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 100%;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: 0;
+}
 .footer {
   font-size: 14px;
   color: #999;
@@ -2032,6 +2045,14 @@ pre .javascript .function {
   50%, 70% {
     transform: scale(1.1);
   }
+}
+.gt-header a,
+.gt-comments a,
+.gt-popup a {
+  border-bottom: none;
+}
+.gt-container .gt-popup .gt-action.is--active:before {
+  top: 0.7em;
 }
 .local-search-pop-overlay {
   position: fixed;
@@ -2397,14 +2418,14 @@ ul.breadcrumb li+li:last-child {
   top: 0;
   overflow: hidden;
   padding: 0;
-  width: 240px;
+  width: 250px;
   background: #fff;
   box-shadow: initial;
   border-radius: initial;
 }
 @media (min-width: 1200px) {
   .container .header-inner {
-    width: 240px;
+    width: 250px;
   }
 }
 @media (max-width: 991px) {
@@ -2431,7 +2452,7 @@ ul.breadcrumb li+li:last-child {
   float: right;
   box-sizing: border-box;
   padding: 40px;
-  width: calc(100% - 252px);
+  width: calc(100% - 262px);
   background: #fff;
   min-height: 700px;
   box-shadow: initial;
@@ -2456,7 +2477,7 @@ ul.breadcrumb li+li:last-child {
   position: static;
   float: left;
   margin-left: -100%;
-  width: 240px;
+  width: 250px;
   background: #f5f7f9;
   box-shadow: none;
 }
@@ -2661,7 +2682,7 @@ ul.breadcrumb li+li:last-child {
 }
 .sidebar-inner {
   box-sizing: border-box;
-  width: 240px;
+  width: 250px;
   color: #555;
   background: #fff;
   box-shadow: initial;
