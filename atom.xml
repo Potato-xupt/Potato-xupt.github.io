@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-07-06T04:28:32.161Z</updated>
+  <updated>2019-07-06T04:46:53.301Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -21,16 +21,16 @@
     <link href="http://yoursite.com/posts/28814/"/>
     <id>http://yoursite.com/posts/28814/</id>
     <published>2019-07-05T12:09:07.000Z</published>
-    <updated>2019-07-06T04:28:32.161Z</updated>
+    <updated>2019-07-06T04:46:53.301Z</updated>
     
-    <content type="html"><![CDATA[<hr><p>This is my first blog !<br>Let us see that！<br> 第一次修改 于：2019/7/6 12:28:29 </p>]]></content>
+    <content type="html"><![CDATA[<hr><p>This is my first blog !<br>Let us see that！<br> 第一次修改 于：2019/7/6 12:28:29<br> 第二次修改，测试修改图片是否生效。 于：2019/7/6 12:46:52 </p>]]></content>
     
     <summary type="html">
     
       
       
         &lt;hr&gt;
-&lt;p&gt;This is my first blog !&lt;br&gt;Let us see that！&lt;br&gt; 第一次修改 于：2019/7/6 12:28:29 &lt;/p&gt;
+&lt;p&gt;This is my first blog !&lt;br&gt;Let us see that！&lt;br&gt; 第一次修改 于：2019/7/6 12:28:29&lt;br&gt; 第二次修改，测试修改图片是否生效。 于：2019/7/6 12:46:52 &lt;/p&gt;
 
       
     
