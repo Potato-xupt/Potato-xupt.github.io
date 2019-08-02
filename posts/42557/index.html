@@ -105,7 +105,7 @@
 <meta property="og:image" content="http://yoursite.com/posts/42557/HashMapDateStructure.jpg">
 <meta property="og:image" content="http://yoursite.com/posts/42557/1120165-20180405000930403-1215437085.png">
 <meta property="og:image" content="http://yoursite.com/posts/42557/resize.png">
-<meta property="og:updated_time" content="2019-08-01T14:09:30.981Z">
+<meta property="og:updated_time" content="2019-08-02T07:08:48.167Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HashMap源码阅读">
 <meta name="twitter:description" content="花了两天时间，对HashMap 1.8的一千多行的源码认真的研究了一下，不禁感叹源码的严谨性，在我平常看来有很多判断都是没有必要的，但是仔细想想为什么这样写，其实严谨的不无道理。 因为源码一共有两千多行，但是真正关键的部分大概是1400行之前，所以就详细的对这些部分做一个解释。">
@@ -425,7 +425,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-08-01 22:09:30" itemprop="dateModified" datetime="2019-08-01T22:09:30+08:00">2019-08-01</time>
+                <time title="修改时间：2019-08-02 15:08:48" itemprop="dateModified" datetime="2019-08-02T15:08:48+08:00">2019-08-02</time>
               </span>
             
           
@@ -481,7 +481,7 @@
       
 
       
-        <h2 id="HashMap的数据结构"><a href="#HashMap的数据结构" class="headerlink" title="HashMap的数据结构"></a>HashMap的数据结构</h2><p>先介绍一点基础结构<br>  <img src="/posts/42557/HashMapDateStructure.jpg" alt><br>HashMap的基础结构是由数组（Node&lt;K,V&gt;[] table）+ 链表 + 红黑树组成的，因为我对红黑树不太了解，所以就没有看后面红黑树部分的东西（1400行之后的代码基本全是在说红黑树部分的），下面就没有讲述红黑树部分的内容。<br>数组的每个下标位置储存的是Node结点， 在Javadoc中把Node称作bin（桶），数组每个下标的一开始存放的是链表，当链表长度大于等于（&gt;=）8的时候，会将链表转换为红黑树。  </p>
+        <h2 id="HashMap的数据结构"><a href="#HashMap的数据结构" class="headerlink" title="HashMap的数据结构"></a>HashMap的数据结构</h2><p>先介绍一点基础结构<br>  <img src="/posts/42557/HashMapDateStructure.jpg" alt><br>HashMap的基础结构是由数组（Node&lt;K,V&gt;[] table）+ 链表 + 红黑树组成的，因为我对红黑树不太了解，所以就没有看后面红黑树部分的东西（1400行之后的代码基本全是在说红黑树部分的），下面就没有讲述红黑树部分的内容。<br>数组的每个下标位置储存的是Node结点， 在Javadoc中把存放数据的table数组的每个下表称作bin（桶），数组每个下标的一开始存放的是链表，当链表长度大于等于（&gt;=）8的时候，会将链表转换为红黑树。  </p>
 <p><strong>顶部注释：</strong></p>
 <blockquote>
 <p>HashMap是Map接口基于哈希表的实现。这种实现提供了所有可选的Map操作，并允许key和value为null（除了HashMap是unsynchronized的和允许使用null外，HashMap和HashTable大致相同。）。此类不保证映射的顺序，特别是它不保证该顺序恒久不变。</p>
