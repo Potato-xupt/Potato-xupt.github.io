@@ -97,7 +97,7 @@
   <meta name="description" content="Although the road is endless and faraway, I still want to pursue the truth in the world.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Potato Blog">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:url" content="http://yoursite.com/categories/Java虚拟机/index.html">
 <meta property="og:site_name" content="Potato Blog">
 <meta property="og:description" content="Although the road is endless and faraway, I still want to pursue the truth in the world.">
 <meta property="og:locale" content="zh-CN">
@@ -113,7 +113,7 @@
 
   
   
-  <link rel="canonical" href="http://yoursite.com/">
+  <link rel="canonical" href="http://yoursite.com/categories/Java虚拟机/">
 
 
 
@@ -123,7 +123,7 @@
   };
 </script>
 
-  <title>Potato Blog</title>
+  <title>分类: Java虚拟机 | Potato Blog</title>
   
 
 
@@ -171,8 +171,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -214,7 +213,7 @@
         
         
           
-          <li class="menu-item menu-item-home menu-item-active">
+          <li class="menu-item menu-item-home">
 
     
     
@@ -232,7 +231,7 @@
         
         
           
-          <li class="menu-item menu-item-categories">
+          <li class="menu-item menu-item-categories menu-item-active">
 
     
     
@@ -340,551 +339,76 @@
           
             
 
+    
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+    
+
+  
+
+
           
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
-    
+
+  
+  
+  
+  <div class="post-block category">
+
+    <div id="posts" class="posts-collapse">
+      <div class="collection-title">
+        <h1>Java虚拟机<small>分类</small>
+        </h1>
+      </div>
+
       
-
-  
-
-  
-  
-  
-
-  
+        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/35314/">
+    <header class="post-header">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Potato">
-      <meta itemprop="description" content="Although the road is endless and faraway, I still want to pursue the truth in the world.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potato Blog">
-    </span>
-
-    
-      <header class="post-header">
-
+      <h2 class="post-title">
         
+          <a class="post-title-link" href="/posts/35314/" itemprop="url">
+            
+              <span itemprop="name">Java内存区域</span>
+            
+          </a>
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/posts/35314/" class="post-title-link" itemprop="url">Java内存区域</a>
-              
-            
-          </h1>
-        
+      </h2>
 
-        <div class="post-meta">
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated" datetime="2019-08-25T21:50:45+08:00" content="2019-08-25">
+          08-25
+        </time>
+      </div>
 
-          
-          
-          
+    </header>
+  </article>
 
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
 
-              
-                
-              
-
-              <time title="创建时间：2019-08-25 21:50:45" itemprop="dateCreated datePublished" datetime="2019-08-25T21:50:45+08:00">2019-08-25</time>
-            </span>
-          
-
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-08-26 00:39:57" itemprop="dateModified" datetime="2019-08-26T00:39:57+08:00">2019-08-26</time>
-              </span>
-            
-          
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java虚拟机/" itemprop="url" rel="index"><span itemprop="name">Java虚拟机</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-		  
-		  
-
-          <br>
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          对于Java程序员来说，在虚拟机自动内存管理机制的帮助下，不需要为每一个new的操作去写配对的delete/free代码，不容易出现内存泄露和内存溢出的问题，因为把这些工作交给虚拟机去管理内存；但也正是因为如此，一旦出现内存泄露和溢出方面的问题，如果不了解虚拟机是如何使用内存的，那么排查错误将会成为一项异常艰难的工作。
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/posts/35314/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
       
     </div>
 
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
   
   
   
-  </article>
-
-
-    
-      
 
   
 
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/33665/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Potato">
-      <meta itemprop="description" content="Although the road is endless and faraway, I still want to pursue the truth in the world.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potato Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/posts/33665/" class="post-title-link" itemprop="url">ArrayList源码阅读</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-
-          
-          
-          
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-08-06 19:57:45" itemprop="dateCreated datePublished" datetime="2019-08-06T19:57:45+08:00">2019-08-06</time>
-            </span>
-          
-
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-08-25 01:48:25" itemprop="dateModified" datetime="2019-08-25T01:48:25+08:00">2019-08-25</time>
-              </span>
-            
-          
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java容器/" itemprop="url" rel="index"><span itemprop="name">Java容器</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-		  
-		  
-
-          <br>
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          对Java集合中比较常用的一个容器：ArrayList的源码进行分析，相比来说ArrayList的源码还是比较容易阅读的。
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/posts/33665/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/42557/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Potato">
-      <meta itemprop="description" content="Although the road is endless and faraway, I still want to pursue the truth in the world.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Potato Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/posts/42557/" class="post-title-link" itemprop="url">HashMap源码阅读</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-
-          
-          
-          
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-07-27 19:51:13" itemprop="dateCreated datePublished" datetime="2019-07-27T19:51:13+08:00">2019-07-27</time>
-            </span>
-          
-
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-08-04 20:11:11" itemprop="dateModified" datetime="2019-08-04T20:11:11+08:00">2019-08-04</time>
-              </span>
-            
-          
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java容器/" itemprop="url" rel="index"><span itemprop="name">Java容器</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-		  
-		  
-
-          <br>
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          花了两天时间，对HashMap 1.8的一千多行的源码认真的研究了一下，不禁感叹源码的严谨性，在我平常看来有很多判断都是没有必要的，但是仔细想想为什么这样写，其实严谨的不无道理。 因为源码一共有两千多行，但是真正关键的部分大概是1400行之前，所以就详细的对这些部分做一个解释。
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/posts/42557/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
