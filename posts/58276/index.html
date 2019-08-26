@@ -94,17 +94,26 @@
 
 
 
-  <meta name="description" content="Although the road is endless and faraway, I still want to pursue the truth in the world.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="日程表">
-<meta property="og:url" content="http://yoursite.com/schedule/index.html">
+  <meta name="description" content="在了解了Java内存区域是如何划分后，就要落实到具体的问题来思考了，要知道数据是如何创建、如何布局以及如何访问的细节问题，因此就以HotSpot虚拟机为例来了解这些细节问题。">
+<meta name="keywords" content="java,JVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HotSpot 虚拟机对象探秘">
+<meta property="og:url" content="http://yoursite.com/posts/58276/index.html">
 <meta property="og:site_name" content="Potato Blog">
-<meta property="og:description" content="Although the road is endless and faraway, I still want to pursue the truth in the world.">
+<meta property="og:description" content="在了解了Java内存区域是如何划分后，就要落实到具体的问题来思考了，要知道数据是如何创建、如何布局以及如何访问的细节问题，因此就以HotSpot虚拟机为例来了解这些细节问题。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-06T13:29:21.021Z">
+<meta property="og:image" content="http://yoursite.com/posts/58276/Java%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%BF%87%E7%A8%8B.png">
+<meta property="og:image" content="http://yoursite.com/posts/58276/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F.png">
+<meta property="og:image" content="http://yoursite.com/posts/58276/%E6%99%AE%E9%80%9A%E5%AF%B9%E8%B1%A1Header.png">
+<meta property="og:image" content="http://yoursite.com/posts/58276/%E6%95%B0%E7%BB%84%E5%AF%B9%E8%B1%A1Header.png">
+<meta property="og:image" content="http://yoursite.com/posts/58276/MarkWord.png">
+<meta property="og:image" content="http://yoursite.com/posts/58276/%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BF%E9%97%AE%E5%AE%9A%E4%BD%8D-%E4%BD%BF%E7%94%A8%E5%8F%A5%E6%9F%84.png">
+<meta property="og:image" content="http://yoursite.com/posts/58276/%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BF%E9%97%AE%E5%AE%9A%E4%BD%8D-%E7%9B%B4%E6%8E%A5%E6%8C%87%E9%92%88.png">
+<meta property="og:updated_time" content="2019-08-26T17:36:04.753Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="日程表">
-<meta name="twitter:description" content="Although the road is endless and faraway, I still want to pursue the truth in the world.">
+<meta name="twitter:title" content="HotSpot 虚拟机对象探秘">
+<meta name="twitter:description" content="在了解了Java内存区域是如何划分后，就要落实到具体的问题来思考了，要知道数据是如何创建、如何布局以及如何访问的细节问题，因此就以HotSpot虚拟机为例来了解这些细节问题。">
+<meta name="twitter:image" content="http://yoursite.com/posts/58276/Java%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%BF%87%E7%A8%8B.png">
 
 
 
@@ -114,7 +123,7 @@
 
   
   
-  <link rel="canonical" href="http://yoursite.com/schedule/">
+  <link rel="canonical" href="http://yoursite.com/posts/58276/">
 
 
 
@@ -124,7 +133,7 @@
   };
 </script>
 
-  <title>日程表 | Potato Blog</title>
+  <title>HotSpot 虚拟机对象探秘 | Potato Blog</title>
   
 
 
@@ -340,89 +349,331 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
     
+  
+  
+
+  
+
+  <article class="post post-type-normal true" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/58276/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Potato">
+      <meta itemprop="description" content="Although the road is endless and faraway, I still want to pursue the truth in the world.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potato Blog">
+    </span>
+
     
-    <div class="post-block page">
       <header class="post-header">
 
-<h1 class="post-title" itemprop="name headline">日程表
-
-</h1>
-
-<div class="post-meta">
-  
-  
-
-
-
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
+        
+          <h1 class="post-title" itemprop="name headline">HotSpot 虚拟机对象探秘
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-26 22:19:49" itemprop="dateCreated datePublished" datetime="2019-08-26T22:19:49+08:00">2019-08-26</time>
+            </span>
+          
+
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-08-27 01:36:04" itemprop="dateModified" datetime="2019-08-27T01:36:04+08:00">2019-08-27</time>
+              </span>
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java虚拟机/" itemprop="url" rel="index"><span itemprop="name">Java虚拟机</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+		  
+		  
+
+          <br>
+          
+
+          
+
+          
+            <div class="post-description">在了解了Java内存区域是如何划分后，就要落实到具体的问题来思考了，要知道数据是如何创建、如何布局以及如何访问的细节问题，因此就以HotSpot虚拟机为例来了解这些细节问题。</div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h1><p>下图便是一个Java对象创建的过程<br><img src="/posts/58276/Java%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%BF%87%E7%A8%8B.png" alt></p>
+<h2 id="类加载检查"><a href="#类加载检查" class="headerlink" title="类加载检查"></a>类加载检查</h2><p>在Java程序运行期间无时无刻都有对象被创建出来，在语言层面来说，创建对象通常仅仅是一个new关键字而已，而在虚拟机中，遇到一条new指令时，<strong>首先将去检查这个指令的参数是否能在常量池中定位到这个类的符号引用，并且检查这个符号引用代表的类是否已被加载、解析和初始化过。如果没有，那必须先执行相应的类加载过程。</strong></p>
+<h2 id="分配内存"><a href="#分配内存" class="headerlink" title="分配内存"></a>分配内存</h2><p>在类加载检查通过之后，接下来虚拟机将为新生对象分配内存。对象所需的内存大小在类加载完成后便可完全确定（具体将在下一节介绍）。</p>
+<p>为对象分配内存空间的任务等于把一块确定大小的内存从Java堆中划分出来。分配方式有两种：<strong>“内存碰撞”</strong>和<strong>“空闲列表”</strong>，选择哪种方式由Java堆是否规整决定，而Java堆是否规整取决于虚拟机所采用的垃圾收集器是否带有压缩整理功能。</p>
+<blockquote>
+<ul>
+<li>指针碰撞：Java堆中内存是绝对规整的，所有用过的内存放在一边，空闲的内存放在另一边，中间放着一个指针作为分界点的指示器，那么分配内存就是把指针向空闲空间那边挪动对象大小的距离即可。</li>
+<li>空闲列表：如果Java堆中内存并不是规整的，已使用的内存与空闲的内存相互交错，那么虚拟机就必须维护一个列表，记录那些内存是可用的，在分配的时候从列表中找到一块足够大的内存空间划分给对象实例，并更新列表上的记录。</li>
+</ul>
+</blockquote>
+<p><img src="/posts/58276/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F.png" alt></p>
+<p>因为在虚拟机中对象创建是一个非常频繁的行为，即使是仅仅修改一个指针所指向的位置，在并发的情况下也并不是线程安全的。可能出现正在给A对象分配内存，指针还没来得及修改，对象B又同时使用了原来的指针来分配内存的情况。所以对于内存分配引发的并发问题有两种解决方案：<strong>CAS+失败重试</strong>和<strong>本地线程分配缓冲（TLAB）</strong></p>
+<blockquote>
+<ul>
+<li>CAS+失败重试：以这种方式保证更新操作的原子性。</li>
+<li>本地线程分配缓冲（TLAB）：把内存分配堆动作按线程划分在不同的空间之中进行，即每个线程在Java堆中预先分配一小块内存，每个线程在自己的TLAB上分配内存，只有当对象大于TLAB中的剩余内存或者TLAB用完时，采用同步锁定（synchronized）的方式分配新的TLAB。</li>
+</ul>
+</blockquote>
+<h2 id="初始化零值"><a href="#初始化零值" class="headerlink" title="初始化零值"></a>初始化零值</h2><p>内存分配完成后，虚拟机将对分配到的内存空间都初始化为零值（不包括对象头），如果使用TLAB，这一步可以提前至TLAB分配时进行。</p>
+<p>这一步的操作保证了对象的实例字段在Java代码中可以不赋初始值就直接使用，程序能访问到这些字段的数据类型所对应的零值。</p>
+<h2 id="设置对象头"><a href="#设置对象头" class="headerlink" title="设置对象头"></a>设置对象头</h2><p>初始化零值之后，虚拟机要对对象进行必要的设置，例如这个对象是哪个类的实例、如何才能找到类的元数据信息、对象的哈希码、对象的GC分代年龄等信息。<strong>这些信息都存放在对象头中。</strong></p>
+<p>根据虚拟机当前的运行状态不同，如是否启用偏向锁等，对象头会有相应的不同的设置方式，具体会在下一节做详细介绍。</p>
+<h2 id="执行init方法"><a href="#执行init方法" class="headerlink" title="执行init方法"></a>执行init方法</h2><p>在上面四个步骤完成之后，在Java虚拟机的角度，一个新的对象已经产生了；但是在Java程序的角度来看，对象的创建才刚开始，<code>&lt;init&gt;</code>方法还没有执行，所有的字段都是零。</p>
+<p>所以一般来说，<strong>执行new指令之后会接着执行<code>&lt;init&gt;</code>方法，把对象按照程序员的意愿进行初始化</strong>，这样一个真正可用的对象才算完全产生出来。</p>
+<h1 id="对象的内存布局"><a href="#对象的内存布局" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h1><p><strong>在HotSpot虚拟机中，对象在内存中存储的布局可以分为3块区域：对象头（Header）、实例数据（Instance Data）和对齐填充（Padding）。</strong></p>
+<h2 id="对象头"><a href="#对象头" class="headerlink" title="对象头"></a>对象头</h2><p>HotSpot虚拟机的对象头包括两部分信息:<strong>Mark Word</strong> 和 <strong>类型指针（Class Pointer）</strong>。</p>
+<p>Java虚拟机中对象头的方式有以下俩种（以32位Java虚拟机为例）：<br>普通对象：<img src="/posts/58276/%E6%99%AE%E9%80%9A%E5%AF%B9%E8%B1%A1Header.png" alt><br>数组对象：<img src="/posts/58276/%E6%95%B0%E7%BB%84%E5%AF%B9%E8%B1%A1Header.png" alt></p>
+<h3 id="Mark-Word"><a href="#Mark-Word" class="headerlink" title="Mark Word"></a>Mark Word</h3><p><strong>第一部分用于存储对象自身的运行时数据（mark Word）</strong>，如哈希码、GC分代年龄、锁状态标志、线程持有的锁、偏向线程ID、偏向时间戳等。<br>这部分数据的长度在32位和64位的虚拟机（未开启压缩指针）中分别为32bit和64bit，也就是一个Word的大小，官方称它为“Mark Word”。</p>
+<p>对象需要存储的运行时数据很多时，如果超出了32位或64位Bitmap结构所能记录的限度。考虑到虚拟机的空间效率，Mark Word被设计成一个非固定的数据结构以便在极小的空间内存储尽量多信息，<strong>它会根据对象的状态复用自己的存储空间</strong>。</p>
+<p>大部分情况下，Mark Word的32bit空间中的25bit用于存储对象哈希码，4bit用于存储对象分代年龄，2bit用于存储锁状态标志位，1bit用于标记对象是否启用偏向锁</p>
+<p>不同锁状态标志位标记位表示的整个Mark Word含义不同，具体如下： <img src="/posts/58276/MarkWord.png" alt>    </p>
+<p>其中各部分的含义如下：</p>
+<blockquote>
+<ul>
+<li><strong>lock</strong> : 2位的锁状态标记位，该标记的值不同，整个Mark Word表示的含义不同。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">存储内容</th>
+<th align="center">biased_lock</th>
+<th align="center">lock（标记位）</th>
+<th align="center">状态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">对象的哈希码、分代年龄</td>
+<td align="center">0</td>
+<td align="center">01</td>
+<td align="center">无锁</td>
+</tr>
+<tr>
+<td align="center">偏向线程ID、偏向时间戳、对象分代年龄</td>
+<td align="center">1</td>
+<td align="center">01</td>
+<td align="center">偏向锁</td>
+</tr>
+<tr>
+<td align="center">指向锁记录的指针</td>
+<td align="center">0</td>
+<td align="center">00</td>
+<td align="center">轻量级锁</td>
+</tr>
+<tr>
+<td align="center">指向重量级锁的指针</td>
+<td align="center">0</td>
+<td align="center">10</td>
+<td align="center">重量级锁</td>
+</tr>
+<tr>
+<td align="center">空，不需要记录信息</td>
+<td align="center">0</td>
+<td align="center">11</td>
+<td align="center">GC标记</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>biased_lock</strong> : 只占1位，用于标记对象是否启用偏向锁。为1时表示对象启用偏向锁，为0时表示对象没有偏向锁。</li>
+<li><strong>age</strong> ： 4位的Java对象分代年龄。由于只有4位，所以最大值为15。</li>
+<li><strong>identity_hashcode</strong> ： 25位的对象标识哈希码，采用延迟加载技术。调用<code>System.identityHashCode()</code>计算，并会将结果写到该对象头中。<strong>当对象被锁定时，该值会移动到管程Monitor中。</strong></li>
+<li><strong>thread</strong> ： 占23位，表示持有偏向锁的线程ID。</li>
+<li><strong>epoch</strong> ： 占2位，表示偏向时间戳。</li>
+<li><strong>ptr_to_lock_record</strong> ： 占30位，指向栈中锁记录的指针。</li>
+<li><strong>ptr_to_heavyweight_monitor</strong> ： 占30位，指向管程Monitor的指针。</li>
+</ul>
+</blockquote>
+<h3 id="类型指针"><a href="#类型指针" class="headerlink" title="类型指针"></a>类型指针</h3><p>对象头的另一部分就是类型指针，<strong>即对象指向它的类元数据的指针，虚拟机通过这个指针来确定这个对象是哪个类的实例</strong>。</p>
+<p>该指针的位长度为JVM的一个字大小，即32位的JVM为32位，64位的JVM为64位。如果应用的对象过多，使用64位的指针将浪费大量内存，统计而言，64位的JVM将会比32位的JVM多耗费50%的内存。为了节约内存可以开启压缩指针（<code>+UseCompressedOops</code>），，其中，OOPS（ordinary object pointers），即普通对象指针。开启该选项后，下列指针将压缩至32位：</p>
+<ul>
+<li>每个Class的属性指针（即静态变量）</li>
+<li>每个对象的属性指针（即对象变量）</li>
+<li>普通对象数组的每个元素指针</li>
+</ul>
+<p><strong>如果对象是一个Java数组，那在对象头中还必须有一块用于记录数组长度的数据，</strong>这部分数据的长度也随着JVM架构的不同而不同：32位的JVM上，长度为32位；64位JVM则为64位。</p>
+<h2 id="实例数据"><a href="#实例数据" class="headerlink" title="实例数据"></a>实例数据</h2><p><strong>实例数据部分是对象真正存储的有效信息</strong>，也就是在程序代码中所定义的各种类型的字段。</p>
+<p><strong>这部分的存储顺序会受到虚拟机分配策略和字段在Java源码中定义的顺序的影响</strong>，HotSpot虚拟机默认的分配策略为longs/doubles、ints、shorts/chars、bytes/booleans、OOPS（ordinary object pointers），从这个分配策略可以看出，子类中较窄的变量也可能会插入到父类变量的空隙之中。</p>
+<h2 id="对齐填充"><a href="#对齐填充" class="headerlink" title="对齐填充"></a>对齐填充</h2><p><strong>第三部分对齐填充并不是必然存在的，也没有特别的含义，仅仅起着占位符的作用</strong>，因为 Hotspot 虚拟机的自动内存管理系统要求对象起始地址必须是 8 字节的整数倍，换句话说就是对象的大小必须是 8 字节的整数倍。而对象头部分正好是 8 字节的倍数（1 倍或 2 倍），因此，当对象实例数据部分没有对齐时，就需要通过对齐填充来补全。</p>
+<p>关于对象头的具体实现处，可以参考ArrayList的数组默认最大长度（Integer.MAX_VALUE - 8）。</p>
+<h1 id="对象的访问定位"><a href="#对象的访问定位" class="headerlink" title="对象的访问定位"></a>对象的访问定位</h1><p>建立对象就是为了使用对象，<strong>我们的Java程序需要通过栈上的reference数据来操作堆上的具体对象</strong>。</p>
+<p>而由于reference类型在Java虚拟机规范中只规定了一个指向对象的引用，没有定义这个引用该通过何种方式去定位、访问堆中的对象的具体位置。所以目前主流的访问方式有两种：<strong>句柄</strong>和<strong>直接指针</strong>。</p>
+<h2 id="句柄"><a href="#句柄" class="headerlink" title="句柄"></a>句柄</h2><p>如果使用句柄访问的话，那么<strong>Java堆中将会划分出一块内存来作为句柄池，reference中储存的就是对象的句柄地址，而句柄中包含了对象实例数据与类型数据各自的具体地址信息</strong>。如图所示：<img src="/posts/58276/%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BF%E9%97%AE%E5%AE%9A%E4%BD%8D-%E4%BD%BF%E7%94%A8%E5%8F%A5%E6%9F%84.png" alt></p>
+<h2 id="直接指针"><a href="#直接指针" class="headerlink" title="直接指针"></a>直接指针</h2><p>如果使用直接指针，那么<strong>Java堆对象的布局中就必须考虑如何放置访问类型数据的相关信息，而reference在储存的直接就是对象的地址</strong>。如图所示：<img src="/posts/58276/%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BF%E9%97%AE%E5%AE%9A%E4%BD%8D-%E7%9B%B4%E6%8E%A5%E6%8C%87%E9%92%88.png" alt></p>
+<h2 id="句柄和直接指针对比"><a href="#句柄和直接指针对比" class="headerlink" title="句柄和直接指针对比"></a>句柄和直接指针对比</h2><p>这两种方式各有优势。</p>
+<ul>
+<li><p><strong>句柄方式的最大好处就是reference中存储的是稳定的句柄地址</strong>，在对象被移动（GC回收时移动对象是非常普遍的行为）时只会改变句柄中的示例数据指针，而reference本身不需要改变。</p>
+</li>
+<li><p><strong>直接指针方式的最大好处就是速度更快</strong>，它节省了一次指针定位的时间开销。由于对象的访问在Java中非常频繁，因此这类开销积少成多后也是一项非常可观的执行成本。</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
         
           
-  
-  
-  <div class="post-block schedule">
-    <div id="schedule">
-      <ul id="event-list">
-	
-      </ul>
-    </div>
+        
+        <div class="post-tags">
+          
+		  <!--# -->
+            <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
+          
+		  <!--# -->
+            <a href="/tags/JVM/" rel="tag"><i class="fa fa-tag"></i> JVM</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/35314/" rel="next" title="Java内存区域">
+                <i class="fa fa-chevron-left"></i> Java内存区域
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
 
-        
-      </div>
-      
-      
-      
-    </div>
-    
-
-
-
-    
-    
-    
   </div>
 
 
           </div>
           
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
 
         </div>
         
@@ -442,8 +693,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -566,6 +826,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#对象的创建"><span class="nav-number">1.</span> <span class="nav-text">对象的创建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载检查"><span class="nav-number">1.1.</span> <span class="nav-text">类加载检查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分配内存"><span class="nav-number">1.2.</span> <span class="nav-text">分配内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化零值"><span class="nav-number">1.3.</span> <span class="nav-text">初始化零值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置对象头"><span class="nav-number">1.4.</span> <span class="nav-text">设置对象头</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行init方法"><span class="nav-number">1.5.</span> <span class="nav-text">执行init方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对象的内存布局"><span class="nav-number">2.</span> <span class="nav-text">对象的内存布局</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#对象头"><span class="nav-number">2.1.</span> <span class="nav-text">对象头</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mark-Word"><span class="nav-number">2.1.1.</span> <span class="nav-text">Mark Word</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类型指针"><span class="nav-number">2.1.2.</span> <span class="nav-text">类型指针</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例数据"><span class="nav-number">2.2.</span> <span class="nav-text">实例数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对齐填充"><span class="nav-number">2.3.</span> <span class="nav-text">对齐填充</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对象的访问定位"><span class="nav-number">3.</span> <span class="nav-text">对象的访问定位</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#句柄"><span class="nav-number">3.1.</span> <span class="nav-text">句柄</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#直接指针"><span class="nav-number">3.2.</span> <span class="nav-text">直接指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#句柄和直接指针对比"><span class="nav-number">3.3.</span> <span class="nav-text">句柄和直接指针对比</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
@@ -725,6 +1002,37 @@
 
   
 
+
+  
+    
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '9b0c87d3c176c7c8ae2f',
+    clientSecret: 'c1a521ad426a42ab0a65b5d65a33e27303274435',
+    repo: 'comments',
+    owner: 'Potato-xupt',
+    admin: ['Potato-xupt'],
+    id: md5(location.pathname),
+    
+      language: window.navigator.language || window.navigator.userLanguage,
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
 
 
   
