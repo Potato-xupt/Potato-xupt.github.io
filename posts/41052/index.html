@@ -94,16 +94,18 @@
 
 
 
-  <meta name="description" content="Although the road is endless and faraway, I still want to pursue the truth in the world.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Potato Blog">
-<meta property="og:url" content="http://yoursite.com/archives/2019/07/index.html">
+  <meta name="description" content="阅读GC日志是处理Java虚拟机内存问题的基础技能，他只是一些人为规定的规则，没有太多技术含量。这里只是对两段典型的GC日志分析。">
+<meta name="keywords" content="java,JVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解GC日志">
+<meta property="og:url" content="http://yoursite.com/posts/41052/index.html">
 <meta property="og:site_name" content="Potato Blog">
-<meta property="og:description" content="Although the road is endless and faraway, I still want to pursue the truth in the world.">
+<meta property="og:description" content="阅读GC日志是处理Java虚拟机内存问题的基础技能，他只是一些人为规定的规则，没有太多技术含量。这里只是对两段典型的GC日志分析。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-08-31T06:41:04.057Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Potato Blog">
-<meta name="twitter:description" content="Although the road is endless and faraway, I still want to pursue the truth in the world.">
+<meta name="twitter:title" content="理解GC日志">
+<meta name="twitter:description" content="阅读GC日志是处理Java虚拟机内存问题的基础技能，他只是一些人为规定的规则，没有太多技术含量。这里只是对两段典型的GC日志分析。">
 
 
 
@@ -113,7 +115,7 @@
 
   
   
-  <link rel="canonical" href="http://yoursite.com/archives/2019/07/">
+  <link rel="canonical" href="http://yoursite.com/posts/41052/">
 
 
 
@@ -123,7 +125,7 @@
   };
 </script>
 
-  <title>归档 | Potato Blog</title>
+  <title>理解GC日志 | Potato Blog</title>
   
 
 
@@ -171,7 +173,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -339,101 +341,226 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+    
+  
+  
+
+  
+
+  <article class="post post-type-normal true" itemscope itemtype="http://schema.org/Article">
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/41052/">
 
-      
-      <span class="archive-page-counter">
-        
-        
-        
-          
-        
-        嗯..! 目前共计 7 篇日志。 继续努力。
-      </span>
-      
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Potato">
+      <meta itemprop="description" content="Although the road is endless and faraway, I still want to pursue the truth in the world.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
 
-      
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potato Blog">
+    </span>
 
-        
-        
-        
+    
+      <header class="post-header">
 
         
-          
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2019">2019</h1>
-          </div>
         
-        
+          <h1 class="post-title" itemprop="name headline">理解GC日志
 
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/posts/42557/" itemprop="url">
+              
             
-              <span itemprop="name">HashMap源码阅读</span>
-            
-          </a>
+          </h1>
         
-      </h2>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-27T19:51:13+08:00" content="2019-07-27">
-          07-27
-        </time>
-      </div>
+        <div class="post-meta">
 
-    </header>
-  </article>
+          
+          
+          
 
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
 
+              
+                
+              
+
+              <time title="创建时间：2019-08-31 14:13:03 / 修改时间：14:41:04" itemprop="dateCreated datePublished" datetime="2019-08-31T14:13:03+08:00">2019-08-31</time>
+            </span>
+          
+
+          
+            
+
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java虚拟机/" itemprop="url" rel="index"><span itemprop="name">Java虚拟机</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+		  
+		  
+
+          <br>
+          
+
+          
+
+          
+            <div class="post-description">阅读GC日志是处理Java虚拟机内存问题的基础技能，他只是一些人为规定的规则，没有太多技术含量。这里只是对两段典型的GC日志分析。</div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
+      
 
+      
+        <p>每一种收集器的日志形式都是由它们自身的实现所决定的,换而言之,每个收集器的日志格式都可以不一样。但虚拟机设计者为了方便用户阅读,将各个收集器的日志都维持一定的共性,例如以下两段典型的GC日志:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">33.125</span>: [GC [DefNew: <span class="number">3324</span>K-&gt;<span class="number">152</span>K(<span class="number">3712</span>K), <span class="number">0.0025925</span> secs] <span class="number">3324</span>K-&gt;<span class="number">152</span>K(<span class="number">11904</span>K), <span class="number">0.0031680</span>secs]</span><br><span class="line"></span><br><span class="line"><span class="number">100.667</span>: [Full GC [Tenured: <span class="number">0</span>K-&gt;<span class="number">210</span>K(<span class="number">10240</span>K), <span class="number">0.0149142</span> secs] <span class="number">4603</span>K-&gt;<span class="number">210</span>K(<span class="number">19456</span>K), [Perm : <span class="number">2999</span>K-&gt;<span class="number">2999</span>K(<span class="number">21248</span>K)], <span class="number">0.0150007</span> secs] [Times: user=<span class="number">0.01</span> sys=<span class="number">0.00</span>, real=<span class="number">0.02</span> secs]</span><br></pre></td></tr></table></figure>
+
+<p>最前面的数字“<code>33.125</code>”和“<code>100.66</code>7”：代表了GC发生的时间，这个数字的含义是从Java虚拟机启动以来经过的秒数。</p>
+<p>GC日志开头的“<code>[GC</code>”和“<code>[Full GC</code>”<strong>说明了这次垃圾收集的停顿类型，而不是用来区分新生代GC还是老年代GC的。</strong>如果有“<code>Full</code>”，说明这次GC是发生了Stop-The-World的。</p>
+<p>接下来的“<code>[DefNew</code>”、“<code>[Tenured</code>”、“<code>[Perm</code>”表示GC发生的区域，这里显示的区域名称与使用的GC收集器是密切相关的。例如上面Serial收集器中的新生代名为“Default NewGeneration”，所以显示的收集“<code>[DefNew</code>”。如果是ParNew收集器，新生代名称就会变为“<code>[ParNew</code>”，意为“Parallel New Generation”。如果采用Parallel Scavenge收集器，那它配套的新生代为“PSYoungGen”，老年代和永久代同理,名称也是由收集器决定的。</p>
+<p>后面方括号内部的“<code>3324K-&gt;152K(3712K)</code>” 含义是 “<strong>GC前该区域已使用容量 -&gt; GC后该区域已使用容量（该内存区域总容量</strong>）”。</p>
+<p>而在方括号之外的“<code>3324K-&gt;152K(11904K)</code>” 表示 “<strong>GC前Java堆已使用容量 -&gt; GC后Java堆已使用容量（Java堆总容量）</strong>”。</p>
+<p>再往后，“<code>0.0031680secs</code>”表示该内存区域GC所占用的时间，单位是秒。有的收集器会给出更具体的时间数据，如“<code>[Times: user=0.01 sys=0.00, real=0.02 secs]</code>”，这里面的user、sys和real与Linux的time命令所输出的含义一致，分别代表用户态消耗的CPU时间、内核态消耗的CPU时间和操作从开始到结束所经过的墙钟时间。</p>
+<p>CPU时间与墙钟时间的区别是,墙钟时间包括各种非运算的等待耗时,例如等待磁盘I/O、等待线程阻塞,而CPU时间不包括这些耗时,但当系统有多CPU或者多核的话,多线程操作会叠加这些CPU时间,所以读者看到user或sys时间超过real时间是完全正常的。</p>
+
+      
     </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+		  <!--# -->
+            <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
+          
+		  <!--# -->
+            <a href="/tags/JVM/" rel="tag"><i class="fa fa-tag"></i> JVM</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/51819/" rel="next" title="JVM垃圾收集器">
+                <i class="fa fa-chevron-left"></i> JVM垃圾收集器
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/44680/" rel="prev" title="内存分配与回收策略">
+                内存分配与回收策略 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+  </div>
 
 
           </div>
           
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
 
         </div>
         
@@ -714,6 +841,10 @@
 
 
   
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
 
   
 
@@ -732,6 +863,37 @@
 
   
 
+
+  
+    
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '9b0c87d3c176c7c8ae2f',
+    clientSecret: 'c1a521ad426a42ab0a65b5d65a33e27303274435',
+    repo: 'comments',
+    owner: 'Potato-xupt',
+    admin: ['Potato-xupt'],
+    id: md5(location.pathname),
+    
+      language: window.navigator.language || window.navigator.userLanguage,
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
 
 
   
