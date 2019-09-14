@@ -23,10 +23,6 @@
       <categories>
         <category>Java虚拟机</category>
       </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>JVM</tag>
-      </tags>
   </entry>
   <entry>
     <title><![CDATA[虚拟机类加载过程]]></title>
@@ -35,10 +31,6 @@
       <categories>
         <category>Java虚拟机</category>
       </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>JVM</tag>
-      </tags>
   </entry>
   <entry>
     <title><![CDATA[类文件结构]]></title>
@@ -47,10 +39,6 @@
       <categories>
         <category>Java虚拟机</category>
       </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>JVM</tag>
-      </tags>
   </entry>
   <entry>
     <title><![CDATA[虚拟机性能监控与故障处理工具]]></title>
@@ -59,10 +47,6 @@
       <categories>
         <category>Java虚拟机</category>
       </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>JVM</tag>
-      </tags>
   </entry>
   <entry>
     <title><![CDATA[内存分配与回收策略]]></title>
@@ -71,10 +55,6 @@
       <categories>
         <category>Java虚拟机</category>
       </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>JVM</tag>
-      </tags>
   </entry>
   <entry>
     <title><![CDATA[理解GC日志]]></title>
@@ -83,10 +63,6 @@
       <categories>
         <category>Java虚拟机</category>
       </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>JVM</tag>
-      </tags>
   </entry>
   <entry>
     <title><![CDATA[JVM垃圾收集器]]></title>
@@ -95,10 +71,6 @@
       <categories>
         <category>Java虚拟机</category>
       </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>JVM</tag>
-      </tags>
   </entry>
   <entry>
     <title><![CDATA[HotSpot 虚拟机对象探秘]]></title>
@@ -107,10 +79,6 @@
       <categories>
         <category>Java虚拟机</category>
       </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>JVM</tag>
-      </tags>
   </entry>
   <entry>
     <title><![CDATA[Java内存区域]]></title>
@@ -119,10 +87,6 @@
       <categories>
         <category>Java虚拟机</category>
       </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>JVM</tag>
-      </tags>
   </entry>
   <entry>
     <title><![CDATA[ArrayList源码阅读]]></title>
@@ -131,11 +95,6 @@
       <categories>
         <category>Java容器</category>
       </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>容器</tag>
-        <tag>源码</tag>
-      </tags>
   </entry>
   <entry>
     <title><![CDATA[HashMap源码阅读]]></title>
@@ -144,9 +103,5 @@
       <categories>
         <category>Java容器</category>
       </categories>
-      <tags>
-        <tag>容器</tag>
-        <tag>源码</tag>
-      </tags>
   </entry>
 </search>
