@@ -103,7 +103,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/posts/10568/838913-fb7f263a0d00afe7.webp">
 <meta property="og:image" content="http://yoursite.com/posts/10568/TIM%E5%9B%BE%E7%89%8720190910214739.png">
-<meta property="og:updated_time" content="2019-09-12T13:31:07.017Z">
+<meta property="og:updated_time" content="2019-09-15T14:13:45.512Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL整体架构">
 <meta name="twitter:description" content="概要地描述了MySQL的服务器架构、各种存储引擎之间的主要区别，以及这些区别的重要性。">
@@ -405,7 +405,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-09-12 21:31:07" itemprop="dateModified" datetime="2019-09-12T21:31:07+08:00">2019-09-12</time>
+                <time title="修改时间：2019-09-15 22:13:45" itemprop="dateModified" datetime="2019-09-15T22:13:45+08:00">2019-09-15</time>
               </span>
             
           
@@ -493,7 +493,6 @@
 <li><strong>隔离性（isolated）</strong>：<strong>通常来说，一个事务所做的修改在最终提交以前，对其他事务是不可见的。</strong>这里的“通常来说”与隔离级别有关。</li>
 <li><strong>持久性（durability）</strong>：<strong>一旦事务提交，则其所做的修改就会永久保存到数据库中。</strong>此时即使系统崩溃，修改的数据也不会丢失。</li>
 </ul>
-<p>事务处理过程中额外的安全性，也会需要数据库系统做更多的额外工作。一个实现了ACID的数据库，相比没有实现ACID的数据库，通常会需要更强的CPU处理能力、更大的内存和更多的磁盘空间。</p>
 <h2 id="隔离级别"><a href="#隔离级别" class="headerlink" title="隔离级别"></a>隔离级别</h2><p>在SQL标准中，定义了四种隔离级别。较低级别的隔离通常可以执行更高的并发，系统的开销也更低。</p>
 <ul>
 <li><strong>READ UNCOMMITED（未提交读）</strong>：在READ UNCOMMITTED级别，事务中的修改，即使没有提交，对其他事务也都是可见的。事务可以读取未提交的数据，这也称为<strong>脏读（Dirty Read）</strong>。这个级别会导致很多问题，而从性能上来讲却并不会比其他级别好太多，但缺少其他级别的很多好处，在实际使用中很少使用。</li>
@@ -692,7 +691,7 @@
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
