@@ -94,21 +94,21 @@
 
 
 
-  <meta name="description" content="对于Java程序员来说，在虚拟机自动内存管理机制的帮助下，不需要为每一个new的操作去写配对的delete/free代码，不容易出现内存泄露和内存溢出的问题，因为把这些工作交给虚拟机去管理内存；但也正是因为如此，一旦出现内存泄露和溢出方面的问题，如果不了解虚拟机是如何使用内存的，那么排查错误将会成为一项异常艰难的工作。">
+  <meta name="description" content="Ioc的全称为Inversion of Control，中文通常翻译为“控制反转”，他还有一个别名叫做依赖注入（Dependency Injection）。好莱坞原则“Don&apos;t call us,we will call you”恰如其分地表达了“反转”的意味。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java内存区域">
-<meta property="og:url" content="http://yoursite.com/posts/35314/index.html">
+<meta property="og:title" content="IoC容器和IoC Service Provider">
+<meta property="og:url" content="http://yoursite.com/posts/10510/index.html">
 <meta property="og:site_name" content="Potato Blog">
-<meta property="og:description" content="对于Java程序员来说，在虚拟机自动内存管理机制的帮助下，不需要为每一个new的操作去写配对的delete/free代码，不容易出现内存泄露和内存溢出的问题，因为把这些工作交给虚拟机去管理内存；但也正是因为如此，一旦出现内存泄露和溢出方面的问题，如果不了解虚拟机是如何使用内存的，那么排查错误将会成为一项异常艰难的工作。">
+<meta property="og:description" content="Ioc的全称为Inversion of Control，中文通常翻译为“控制反转”，他还有一个别名叫做依赖注入（Dependency Injection）。好莱坞原则“Don&apos;t call us,we will call you”恰如其分地表达了“反转”的意味。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/posts/35314/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F.png">
-<meta property="og:image" content="http://yoursite.com/posts/35314/2019-3Java%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9FJDK1.8.png">
-<meta property="og:image" content="http://yoursite.com/posts/35314/26038433.jpg">
-<meta property="og:updated_time" content="2019-09-14T12:58:28.882Z">
+<meta property="og:image" content="http://yoursite.com/posts/10510/TIM%E6%88%AA%E5%9B%BE20191010194249.png">
+<meta property="og:image" content="http://yoursite.com/posts/10510/TIM%E6%88%AA%E5%9B%BE20191010194655.png">
+<meta property="og:image" content="http://yoursite.com/posts/10510/TIM%E6%88%AA%E5%9B%BE20191010200755.png">
+<meta property="og:updated_time" content="2019-10-10T13:57:50.132Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java内存区域">
-<meta name="twitter:description" content="对于Java程序员来说，在虚拟机自动内存管理机制的帮助下，不需要为每一个new的操作去写配对的delete/free代码，不容易出现内存泄露和内存溢出的问题，因为把这些工作交给虚拟机去管理内存；但也正是因为如此，一旦出现内存泄露和溢出方面的问题，如果不了解虚拟机是如何使用内存的，那么排查错误将会成为一项异常艰难的工作。">
-<meta name="twitter:image" content="http://yoursite.com/posts/35314/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F.png">
+<meta name="twitter:title" content="IoC容器和IoC Service Provider">
+<meta name="twitter:description" content="Ioc的全称为Inversion of Control，中文通常翻译为“控制反转”，他还有一个别名叫做依赖注入（Dependency Injection）。好莱坞原则“Don&apos;t call us,we will call you”恰如其分地表达了“反转”的意味。">
+<meta name="twitter:image" content="http://yoursite.com/posts/10510/TIM%E6%88%AA%E5%9B%BE20191010194249.png">
 
 
 
@@ -118,7 +118,7 @@
 
   
   
-  <link rel="canonical" href="http://yoursite.com/posts/35314/">
+  <link rel="canonical" href="http://yoursite.com/posts/10510/">
 
 
 
@@ -128,7 +128,7 @@
   };
 </script>
 
-  <title>Java内存区域 | Potato Blog</title>
+  <title>IoC容器和IoC Service Provider | Potato Blog</title>
   
 
 
@@ -348,7 +348,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/35314/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/10510/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Potato">
@@ -365,7 +365,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Java内存区域
+          <h1 class="post-title" itemprop="name headline">IoC容器和IoC Service Provider
 
               
             
@@ -391,23 +391,13 @@
                 
               
 
-              <time title="创建时间：2019-08-25 21:50:45" itemprop="dateCreated datePublished" datetime="2019-08-25T21:50:45+08:00">2019-08-25</time>
+              <time title="创建时间：2019-10-10 19:21:28 / 修改时间：21:57:50" itemprop="dateCreated datePublished" datetime="2019-10-10T19:21:28+08:00">2019-10-10</time>
             </span>
           
 
           
             
 
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-09-14 20:58:28" itemprop="dateModified" datetime="2019-09-14T20:58:28+08:00">2019-09-14</time>
-              </span>
             
           
 
@@ -420,7 +410,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java虚拟机/" itemprop="url" rel="index"><span itemprop="name">Java虚拟机</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a></span>
 
                 
                 
@@ -446,7 +436,7 @@
           
 
           
-            <div class="post-description">对于Java程序员来说，在虚拟机自动内存管理机制的帮助下，不需要为每一个new的操作去写配对的delete/free代码，不容易出现内存泄露和内存溢出的问题，因为把这些工作交给虚拟机去管理内存；但也正是因为如此，一旦出现内存泄露和溢出方面的问题，如果不了解虚拟机是如何使用内存的，那么排查错误将会成为一项异常艰难的工作。</div>
+            <div class="post-description">Ioc的全称为Inversion of Control，中文通常翻译为“控制反转”，他还有一个别名叫做依赖注入（Dependency Injection）。好莱坞原则“Don't call us,we will call you”恰如其分地表达了“反转”的意味。</div>
           
 
         </div>
@@ -462,68 +452,57 @@
       
 
       
-        <h1 id="运行时数据区域"><a href="#运行时数据区域" class="headerlink" title="运行时数据区域"></a>运行时数据区域</h1><p>Java虚拟机（JVM）在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。而在JDK1.8前后数据区域的划分略有不同，下面会介绍到。<br>JDK1.8之前：<img src="/posts/35314/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F.png" alt><br>JDK1.8： <img src="/posts/35314/2019-3Java%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9FJDK1.8.png" alt><br>因此根据上面的运行时数据区划分图可以看出：</p>
-<p><strong>线程私有的：</strong></p>
-<blockquote>
-<ul>
-<li>程序计数器</li>
-<li>虚拟机栈</li>
-<li>本地方法栈</li>
-</ul>
-</blockquote>
-<p><strong>线程共享的：</strong></p>
-<blockquote>
-<ul>
-<li>堆</li>
-<li>方法区</li>
-<li>直接内存（非运行时数据区的一部分）</li>
-</ul>
-</blockquote>
-<p>下面就按照上面的顺序逐个进行了解。</p>
-<h2 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h2><p>程序计数器是一块较小的内存空间。在虚拟机的概念模型里面，字节码解释器工作时需要知道该执行哪一条字节码指令，而程序计数器的作用就是，通过改变程序计数器的值，来让字节码解释器知道，下一条需要执行的指令是什么。</p>
-<p>其次，Java虚拟机的多线程执行，是通过线程之间轮流执行，而对于一个处理器（如果是多核处理器，那么就是一个内核），在任意一个确定的时刻，只会执行一条线程中的指令。因此，为了避免一个线程过长时间（可能因为计算时间过长或者陷入死循环等原因）占用处理器，导致系统崩溃，所以处理器会给每个线程分配执行的时间，如果当分配的时间结束时，该线程的任务还没有执行完，处理器会被剥夺并分配给另一个线程，直到到达下一次该线程的时间片，处理器才会切换回来，继续执行该线程。因此，为了线程切换后能恢复到正确的执行位置，所以每条线程都需要有一个独立的程序计数器，各线程之间计数器互不影响，独立存储，我们称这类内存区域为“线程私有”的内存。</p>
-<p>从上面的介绍中我们知道程序计数器主要有两个作用：</p>
-<blockquote>
-<ul>
-<li>字节码解释器通过改变程序计数器，从而实现代码的流程控制，如：顺序执行、选择、循环、异常处理等。</li>
-<li>在多线程情况下，程序计数器用于记录当前线程执行的位置，从而当线程切换回来的时候，能够知道该线程上次执行到哪里，接下来该执行什么指令。</li>
-</ul>
-</blockquote>
-<p><strong>注意：</strong></p>
-<blockquote>
-<ul>
-<li>如果线程正在执行的是一个Java方法，那么这个程序计数器是正在执行的方法的虚拟机字节码指令的地址。</li>
-<li>如果线程正在执行的是一个Native方法，那么这个程序计数器则为空（Undefined）。<strong>因此程序计数器是唯一一个不会出现 OutOfMemoryError 的内存区域</strong>，它的生命周期随着线程的创建而创建，随着线程的结束而死亡。</li>
-</ul>
-</blockquote>
-<h2 id="Java虚拟机栈"><a href="#Java虚拟机栈" class="headerlink" title="Java虚拟机栈"></a>Java虚拟机栈</h2><p>Java虚拟机栈描述的是Java方法的内存模型，每次方法调用的数据都是通过栈传递的。而栈中储存的是一个个的栈帧，栈帧就是每个方法在执行的时候都会创建一个栈帧（Stack Frame），栈帧用于储存局部变量表、操作数栈、动态链接、方法出口等信息。因为线程每调用一个方法从开始到结束，都意味着一个栈帧在虚拟机栈中从入栈到出栈的过程。</p>
-<p>Java内存可以粗糙的分为堆内存（Heap）和栈内存（Stack），其中的栈就是Java虚拟机栈，或者说是Java虚拟机栈中的局部变量表部分。</p>
-<p>局部变量表存放了编译器可知的各种（八种）基本数据类型（boolean、byte、char、short、int、float、double、long）、对象引用（不同于对象本身，可能是一个指向对象起始地址的引用指针，也可能是指向一个代表对象的句柄或其他与此对象相关的位置）和returnAdress类型（指向一条字节码指令地址）。<br>其中64位的长度的double和long类型的数据都会占用两个局部变量空间，其余数据只会占用一个局部变量空间。局部变量表所需内存空间在编译期间完成分配，因此当进入一个方法时，这个局部变量表的大小就已经完全确定了，运行期间不会改变其大小。</p>
-<p>Java 虚拟机栈会出现两种异常：<strong>StackOverFlowError 和 OutOfMemoryError</strong></p>
-<blockquote>
-<ul>
-<li><strong>StackOverFlowError:</strong>若Java虚拟机栈的内存大小<strong>不允许</strong>动态扩展，那么如果线程请求的栈深度大于虚拟机所允许的最大深度，那么就会抛出StackOverFlowError异常。</li>
-<li><strong>OutOfMemoryError：</strong>若Java虚拟机栈的内存大小<strong>允许</strong>动态扩展，那么如果线程在扩展时无法申请到足够的内存，就会抛出OutOfMemoryError异常。</li>
-</ul>
-</blockquote>
-<p>Java方法的返回方式有两种：<strong>return语句</strong>和<strong>抛出异常</strong>，不管哪种方法，都会导致栈帧出栈。</p>
-<h2 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h2><p>本地方法栈的作用与Java虚拟机栈的结构和作用几乎完全一样，可以认为二者唯一的区别就是：<strong>Java虚拟机栈为虚拟机执行Java方法（也就是字节码）服务；而本地方法栈为虚拟机执行Native方法服务</strong>。甚至在HotSpot虚拟机栈中将两者合二为一。</p>
-<p><strong>总结得到一点：程序计数器、Java虚拟机栈和本地方法栈都是线程所私有的，故而他们的生命周期和线程相同，它们的生命周期随着线程的创建而创建，随着线程的结束而死亡。</strong></p>
-<h2 id="Java堆"><a href="#Java堆" class="headerlink" title="Java堆"></a>Java堆</h2><p>Java堆（Heap）是Java虚拟机所管理的内存中最大的一块。Java 堆是所有线程共享的一块内存区域，在虚拟机启动时创建。此内存的唯一目的就是：<strong>存放对象实例，几乎所有的对象实例都在这里分配</strong>，在Java虚拟机规范中的描述是：<strong>所有对象的实例以及数组都要在堆上分配。</strong>，但是随着JIT编译器的发展，这种情况也不是那么绝对的了。</p>
-<p>java堆也是垃圾收集器管理的主要区域，因此也被称为 GC堆 ，从垃圾回收的角度看，Java堆中还可细分为：新生代和老生代；再度细分可分：Eden 空间、From Survivor、To Survivor 空间等为；大部分情况下，对象都会首先在Eden区域分配，再一次新生代垃圾回收后，如果对象还存活，则会进入s0或是s1在，并且对象年龄还加一，当他的年龄增加到一定程度（默认为15岁）时，就会被划分到老年代中。</p>
-<p>不论如何划分，都与存放的内容无关；不论哪个区域，存储的都是对象的实例。<strong>进一步划分的目的是为了更好的回收内存，更快的分配内存。</strong></p>
-<p>Java堆可以处于物理上不连续的内存空间中，只要逻辑上是连续的即可。</p>
-<p>Java堆的内存大小可以是固定大小的，也可以是可扩展的（大部分都是）。如果在堆中没有内存来完成实例的分配，并且堆也无法再扩展时，将会抛出<strong>OutOfMemoryError</strong>异常。</p>
-<h2 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h2><p>方法区同样是各个线程共享的内存区域，<strong>它用于储存已被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。</strong>方法区有一个别名叫“非堆（Non-Heap）”，目的就是为了将其与Java堆区分开来。</p>
-<p>仅在HotSpot虚拟机中，方法区也被称为“<strong>永久代</strong>”，仅仅是因为在HotSpot虚拟机中把GC分代收集扩展至方法区，这样可以省去专门为方法区编写内存管理代码的工作。但是问题也因此而来，因为永久代有大小上限，所以当触碰到内存大小的上限时，会抛出OutOfMemoryError异常。</p>
-<p>所以在JDK1.8之后，永久代被彻底删除了，取而代之的是<strong>元空间</strong>（MetaSpace），与永久代有JVM本身内存大小上限的限制不同的是，元空间使用的是直接内存，受到的是本机可用内存的上限限制，只有当触碰到本地内存的极限时，才会抛出OutofMemoryError异常（概率极小）。</p>
-<p>与java堆一样，方法区同样不需要连续的内存和可以选择固定大小或可扩展外，还可以选择不实现垃圾收集。相对而言垃圾收集行为在该区域比较少见，因为该区域内存回收目标主要是针对常量池的回收和对类型的卸载。</p>
-<h2 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h2><p>JDK1.7之前，运行时常量池是方法区的一部分。Class文件中除了有类的版本、字段、方法、接口等描述信息外，还有常量池信息，用于存放编译期生成的各种<strong>字面量</strong>和<strong>符号引用</strong>。<br>运行时常量池相对于Class文件常量池还有一个重要特征是具备<strong>动态性</strong>，将运行期间可能得到的新的常量放入池中。<br>因此既然运行时常量池是方法区的一部分，所以当常量池无法再申请到内存时会抛出 OutOfMemoryError 异常。</p>
-<p><strong>但是在JDK1.7及其之后版本的JVM中，将运行时常量池从方法区中移了出来，在Java堆中开辟了一块内存存放运行时常量池，这样也更加方便于垃圾回收的工作。</strong><br><img src="/posts/35314/26038433.jpg" alt></p>
-<h2 id="直接内存"><a href="#直接内存" class="headerlink" title="直接内存"></a>直接内存</h2><p><strong>直接内存既不是虚拟机运行时数据区的一部分，也不是Java虚拟机规范中定义的内存区域，但是这一部分内存被频繁的使用，而且也可能导致OutofMemoryError异常。</strong></p>
-<p>在JDK1.4中新加入了NIO类，引入了一种基于通道（Channel）于缓存区（Buffer）的I/O方式，它使用Native函数库直接分配堆外内存，然后通过一个存储在Java堆中的DirectByteBuffer对象作为这块内存的引用进行操作。<strong>这样就能在一些场景中显著提高性能，因为避免了在Java堆和Native堆之间来回复制数据。</strong></p>
-<p>虽然本机直接内存并不会收到Java堆的内存大小限制，但是显然会受到本地总内存的大小限制，因此也可能会在动态扩展时抛出OutOfMemoryError异常。</p>
+        <h1 id="IoC的基本概念"><a href="#IoC的基本概念" class="headerlink" title="IoC的基本概念"></a>IoC的基本概念</h1><p>Ioc的作用简单说就是创建对象由以前的程序员自己new构造方法来调用，变成了交由Spring创建对象。举个例子，出门之前得先穿件外套吧？以前，你得自己跑到衣柜面前取出衣服这一依赖对象，然后自己穿上再出门。而现在，你只要跟你的“另一半”使个眼色或者一句话，她就会心领神会地到衣柜那里为你取出衣服，然后再给你穿上，现在你就可以出门了。<img src="/posts/10510/TIM%E6%88%AA%E5%9B%BE20191010194249.png" alt></p>
+<p>通常情况下，被注入对象会直接依赖于被依赖对象。但是，在IoC的场景中，二者之间通过IoC Service Provider（例子中你的另一半）来打交道，素有的被注入对象和依赖对象现在由IoC Service Provider统一管理。被注入对象需要什么，直接跟IoC Service Provider招呼一声，后者就会把相应的被依赖对象注入到被注入对象中。<img src="/posts/10510/TIM%E6%88%AA%E5%9B%BE20191010194655.png" alt></p>
+<h2 id="依赖注入的方式"><a href="#依赖注入的方式" class="headerlink" title="依赖注入的方式"></a>依赖注入的方式</h2><p>IoC有三种依赖注入的方式，即<strong>构造方法注入、setter方法注入以及接口注入</strong>。</p>
+<h3 id="构造方法注入"><a href="#构造方法注入" class="headerlink" title="构造方法注入"></a>构造方法注入</h3><p>构造方法注入，就是<strong>被注入对象可以通过在其构造方法中声明依赖对象的参数列表，让外部（通常是Ioc容器）知道它需要哪些依赖对象</strong>，例子如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">FXNewsProvider</span><span class="params">(IFXNewsListener newsListner,IFXNewsPersister newsPersister&#123;  </span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="keyword">this</span>.newsListener = newsListner;  </span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="keyword">this</span>.newPersistener = newsPersister; </span></span></span><br><span class="line"><span class="function"><span class="params">&#125;</span></span></span><br></pre></td></tr></table></figure>
 
+<p>IoC Service Provider会检查被注入对象的构造方法，取得它所需要的依赖对象列表，进而为其注入相应的对象。<strong>同一个对象是不可能被构造两次的，因此，被注入对象的构造乃至整个生命周期，应该是由IoC Service Provider来管理的。</strong></p>
+<p>构造方法注入方式比较直观，<strong>对象被构造完，即进入就绪状态，可以马上使用。</strong></p>
+<h3 id="setter方法注入"><a href="#setter方法注入" class="headerlink" title="setter方法注入"></a>setter方法注入</h3><p>对应Java Bean对象来说，通过setter方法，可以更改相应的对象属性；通过getter方法，可以获得相应属性的状态。所以当前对象只要为其依赖对象所对应的属性添加setter方法，就可以<strong>通过setter方法将相对应的依赖对象设置到被注入对象中。</strong>。例子如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FXNewsProvider</span> </span>&#123;  </span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> IFXNewsListener  newsListener;  </span><br><span class="line">	<span class="keyword">private</span> IFXNewsPersister newPersistener;    </span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> IFXNewsListener <span class="title">getNewsListener</span><span class="params">()</span> </span>&#123;   </span><br><span class="line">		<span class="keyword">return</span> newsListener;  </span><br><span class="line">	&#125;  </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setNewsListener</span><span class="params">(IFXNewsListener newsListener)</span> </span>&#123;   </span><br><span class="line">		<span class="keyword">this</span>.newsListener = newsListener;  </span><br><span class="line">	&#125;  </span><br><span class="line">	<span class="function"><span class="keyword">public</span> IFXNewsPersister <span class="title">getNewPersistener</span><span class="params">()</span> </span>&#123;   </span><br><span class="line">		<span class="keyword">return</span> newPersistener;  </span><br><span class="line">	&#125;  </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setNewPersistener</span><span class="params">(IFXNewsPersister newPersistener)</span> </span>&#123;   </span><br><span class="line">		<span class="keyword">this</span>.newPersistener = newPersistener;  </span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样外界就可以通过调用setNewsListener和setNewPersistener方法为FXNewsProvider对象注入所依赖的对象了。</p>
+<p><strong>setter方法注入相对更宽松一些，可以在对象构造完成后在诸如。</strong></p>
+<h3 id="接口注入"><a href="#接口注入" class="headerlink" title="接口注入"></a>接口注入</h3><p>相对于前两种方式来说，接口注入就没有那么简单明了了。<strong>被注入对象如果想要IoC Service Provider为其注入依赖对象，就必须实现某个接口。这个接口提供一个方法，用来为其注入依赖对象。</strong></p>
+<p><img src="/posts/10510/TIM%E6%88%AA%E5%9B%BE20191010200755.png" alt></p>
+<p>如上图，FXNewsProvider为了让IoC Service Provider为其注入所依赖的IFXNewsListener，首先需要实现IFXNewsListenerCallable接口，这个接口会声明一个injectNewsListner方法（方法名随意），该方法的参数，就是所依赖对象的类型。这样，InjectionServiceContainer对象，即对应IoC Service Provider就可以通过这个接口方法将依赖对象注入到被注入对象FXNewsProvider中。</p>
+<p>相对于前两种依赖注入方式，<strong>接口注入比较死板和繁琐。如果需要注入依赖对象，被注入对象就必须声明和实现另外的接口。</strong></p>
+<h3 id="三种注入方式比较"><a href="#三种注入方式比较" class="headerlink" title="三种注入方式比较"></a>三种注入方式比较</h3><ul>
+<li><strong>接口注入</strong>：从使用上来说，<strong>接口注入是现在不提倡的一种方式，因为它强制被注入对象实现不必要的接口，带有侵入性。</strong>而构造方法注入和setter方法注入则不需要如此。</li>
+<li><strong>构造方法注入</strong>：这种注入方法的<strong>优点就是，对象在构造完后，即进入就绪状态，可以马上使用。**</strong>缺点就是，当依赖对象比较多的时候，构造方法的参数列表会比较长。而通过反射构造对象的时候，对相同类型的参数的处理会比较困难，维护和使用上也比较麻烦。而且在Java方法中，构造方法无法被继承，无法设置默认值。对于非必须的依赖处理，可能需要引入多个构造方法，而参数列表的变动可能造成维护上的不便。**</li>
+<li><strong>setter方法注入</strong>：因为方法可以命名，所以setter方法注入在描述上要比构造方法注入好一些。另外<strong>setter方法可以被继承，允许设置默认值，而且有良好IDE支持。缺点就是对象无法再构造完成马上进入就绪状态。</strong></li>
+</ul>
+<h1 id="IoC-Service-Provider简介"><a href="#IoC-Service-Provider简介" class="headerlink" title="IoC Service Provider简介"></a>IoC Service Provider简介</h1><p>Ioc Service Provider是一个抽象出来的概念，它可以指代任何将IoC场景中的业务对象绑定到一起的实现方式。它可以是一段代码，也可以是一组相关的类，甚至可以是比较通用的IoC框架或者IoC容器。</p>
+<h2 id="Ioc-Service-Provider的职责"><a href="#Ioc-Service-Provider的职责" class="headerlink" title="Ioc Service Provider的职责"></a>Ioc Service Provider的职责</h2><p>IoC Service Provider的职责相对来说比较简单，主要有两个：<strong>业务对象的构建管理和业务对象间的依赖绑定。</strong></p>
+<ul>
+<li><strong>业务对象的构建管理</strong>：在IoC场景中，业务对象无需关心所依赖的对象如何构建如何取得，但这部分工作始终需要有人来做，所以IoC Service Provider需要将对象的构建逻辑从客户端对象那里剥离出来，以免这部分逻辑污染业务对象的实现。</li>
+<li><strong>业务对象间的绑定</strong>：Ioc Service Provider通过结合之前构建和管理的所有业务对象，以及各个业务对象间可以识别的依赖关系，<strong>将这些对象所依赖的对象注入绑定，从而保证每个业务对象在使用的时候，可以处于就绪状态。</strong></li>
+</ul>
+<h2 id="IoC-Service-Provider如何管理对象间的依赖关系"><a href="#IoC-Service-Provider如何管理对象间的依赖关系" class="headerlink" title="IoC Service Provider如何管理对象间的依赖关系"></a>IoC Service Provider如何管理对象间的依赖关系</h2><p>介绍归纳当前流行的IoC Service Provider产品使用的注册对象管理信息的方式主要有以下几种。</p>
+<h3 id="直接编码方式"><a href="#直接编码方式" class="headerlink" title="直接编码方式"></a>直接编码方式</h3><p>当前大部分的IoC容器都应该支持直接编码方式，包括Spring。<strong>在容器启动之前，我们就可以通过程序编码的方式将被注入对象和依赖对象注册到容器中，并明确它们相互之间的依赖注入关系。</strong>下面代码演示了这样的一个过程：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">IoContainer container = ...;</span><br><span class="line">container.register(FXNewsProvider.class,<span class="keyword">new</span> FXNewsProvider());</span><br><span class="line">container.register(IFXNewsListener.class,<span class="keyword">new</span> DowJonesNewsListener());</span><br><span class="line">... </span><br><span class="line"></span><br><span class="line">FXNewsProvider newsProvider = (FXNewsProvider)container.get(FXNewsProvider.class); </span><br><span class="line">newProvider.getAndPersistNews();</span><br></pre></td></tr></table></figure>
+
+<p>通过为相应的类指定对应的具体实例，可以告知IoC容器，当我们要这种类型的对象实例时，请将容器中注册的、对应的那个具体实例返回给我们。</p>
+<p>如果是接口注入方式，可能伪代码要多一些，但是本质的道理上是一样的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">IoContainer container = ...;</span><br><span class="line">container.register(FXNewsProvider.class,<span class="keyword">new</span> FXNewsProvider()); </span><br><span class="line">container.register(IFXNewsListener.class,<span class="keyword">new</span> DowJonesNewsListener());</span><br><span class="line">... </span><br><span class="line"></span><br><span class="line">container.bind(IFXNewsListenerCallable.class, container.get(IFXNewsListener.class));</span><br><span class="line">... </span><br><span class="line"></span><br><span class="line">FXNewsProvider newsProvider = (FXNewsProvider)container.get(FXNewsProvider.class);  </span><br><span class="line">newProvider.getAndPersistNews();</span><br></pre></td></tr></table></figure>
+
+<p>通过bind方法将“被注入对象”所依赖的对象，绑定为容器中注册过的IFXNewsListener类型的对象实例。</p>
+<h3 id="配置文件方式"><a href="#配置文件方式" class="headerlink" title="配置文件方式"></a>配置文件方式</h3><p>这是一种较为普遍的依赖注入关系管理方式，像properties文件、XML文件等，都可以成为管理依赖注入关系的载体，其中最为常见的就是XML文件的方式。代码例子如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"newsProvider"</span> <span class="attr">class</span>=<span class="string">"..FXNewsProvider"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"newsListener"</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"djNewsListener"</span>/&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"newPersistener"</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"djNewsPersister"</span>/&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span> </span><br><span class="line"> </span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"djNewsListener"</span>   <span class="attr">class</span>=<span class="string">"..impl.DowJonesNewsListener"</span>&gt;</span> <span class="tag">&lt;/<span class="name">bean</span>&gt;</span> </span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"djNewsPersister"</span>   <span class="attr">class</span>=<span class="string">"..impl.DowJonesNewsPersister"</span>&gt;</span> <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>最后，在代码中通过“newProvider”这个名字，即可从容器中取得已经组装好的FXNewsProvider并直接使用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">... </span><br><span class="line">container.readConfigurationFiles(...); </span><br><span class="line">FXNewsProvider newsProvider = (FXNewsProvider)container.getBean(<span class="string">"newsProvider"</span>); </span><br><span class="line">newsProvider.getAndPersistNews();</span><br></pre></td></tr></table></figure>
+
+<h3 id="元数据方式"><a href="#元数据方式" class="headerlink" title="元数据方式"></a>元数据方式</h3><p>这种方式使用Google Guice实现的一种注解方式，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FXNewsProvider</span> </span>&#123;  </span><br><span class="line">	<span class="keyword">private</span> IFXNewsListener  newsListener;  </span><br><span class="line">	<span class="keyword">private</span> IFXNewsPersister newPersistener;  </span><br><span class="line"></span><br><span class="line">	<span class="meta">@Inject</span> <span class="number">5</span>  </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">FXNewsProvider</span><span class="params">(IFXNewsListener listener,IFXNewsPersister persister)</span></span>&#123;   </span><br><span class="line">		<span class="keyword">this</span>.newsListener   = listener;   </span><br><span class="line">		<span class="keyword">this</span>.newPersistener = persister;   </span><br><span class="line">	&#125;  </span><br><span class="line">	</span><br><span class="line">	... </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>通过@Inject，我们指明需要IoC Service Provider通过构造方法注入方式，为FXNewsProvider注入其所依赖的对象。</strong>至于余下的依赖信息，在Guice中是由相应的Module来提供的。下面是FXNewsProvider所使用的Module实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NewsBindingModule</span> <span class="keyword">extends</span> <span class="title">AbstractModule</span>  </span>&#123;  </span><br><span class="line">	<span class="meta">@Override</span>  </span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">()</span> </span>&#123;    </span><br><span class="line">		bind(IFXNewsListener.class) ➥   </span><br><span class="line">		.to(DowJonesNewsListener.class).in(Scopes.SINGLETON);   </span><br><span class="line">		bind(IFXNewsPersister.class) ➥   </span><br><span class="line">		.to(DowJonesNewsPersister.class).in(Scopes.SINGLETON);  </span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过Module指定进一步的依赖注入相关信息之后，就可以直接从Guice那里取得最终已经注入完毕，并且直接可用的对象了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Injector injector = Guice.createInjector(<span class="keyword">new</span> NewsBindingModule()); </span><br><span class="line">FXNewsProvider newsProvider = injector.getInstance(FXNewsProvider.class); </span><br><span class="line">newsProvider.getAndPersistNews();</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -553,8 +532,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/33665/" rel="next" title="ArrayList源码阅读">
-                <i class="fa fa-chevron-left"></i> ArrayList源码阅读
+              <a href="/posts/39035/" rel="next" title="查询性能优化">
+                <i class="fa fa-chevron-left"></i> 查询性能优化
               </a>
             
           </div>
@@ -563,8 +542,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/posts/58276/" rel="prev" title="HotSpot 虚拟机对象探秘">
-                HotSpot 虚拟机对象探秘 <i class="fa fa-chevron-right"></i>
+              <a href="/posts/10510/" rel="prev" title="IoC容器和IoC Service Provider">
+                IoC容器和IoC Service Provider <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -738,7 +717,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#运行时数据区域"><span class="nav-number">1.</span> <span class="nav-text">运行时数据区域</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#程序计数器"><span class="nav-number">1.1.</span> <span class="nav-text">程序计数器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java虚拟机栈"><span class="nav-number">1.2.</span> <span class="nav-text">Java虚拟机栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#本地方法栈"><span class="nav-number">1.3.</span> <span class="nav-text">本地方法栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java堆"><span class="nav-number">1.4.</span> <span class="nav-text">Java堆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法区"><span class="nav-number">1.5.</span> <span class="nav-text">方法区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行时常量池"><span class="nav-number">1.6.</span> <span class="nav-text">运行时常量池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#直接内存"><span class="nav-number">1.7.</span> <span class="nav-text">直接内存</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#IoC的基本概念"><span class="nav-number">1.</span> <span class="nav-text">IoC的基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#依赖注入的方式"><span class="nav-number">1.1.</span> <span class="nav-text">依赖注入的方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构造方法注入"><span class="nav-number">1.1.1.</span> <span class="nav-text">构造方法注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setter方法注入"><span class="nav-number">1.1.2.</span> <span class="nav-text">setter方法注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#接口注入"><span class="nav-number">1.1.3.</span> <span class="nav-text">接口注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三种注入方式比较"><span class="nav-number">1.1.4.</span> <span class="nav-text">三种注入方式比较</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IoC-Service-Provider简介"><span class="nav-number">2.</span> <span class="nav-text">IoC Service Provider简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Ioc-Service-Provider的职责"><span class="nav-number">2.1.</span> <span class="nav-text">Ioc Service Provider的职责</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IoC-Service-Provider如何管理对象间的依赖关系"><span class="nav-number">2.2.</span> <span class="nav-text">IoC Service Provider如何管理对象间的依赖关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#直接编码方式"><span class="nav-number">2.2.1.</span> <span class="nav-text">直接编码方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置文件方式"><span class="nav-number">2.2.2.</span> <span class="nav-text">配置文件方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#元数据方式"><span class="nav-number">2.2.3.</span> <span class="nav-text">元数据方式</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
