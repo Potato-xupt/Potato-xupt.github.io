@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.2.0',
+    sidebar: {"position":"left","width":250,"display":"post","offset":12,"onmobile":true,"dimmer":true},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="根据之前说过的，Spring的IoC容器是一个IoC Service Provider，但是我们只是知道了IoC Service Provider是什么，还不是知道其“庐山真面目”中的“容器”到底是什么，这里就介绍IoC容器之中一BeanFactory。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IoC容器之BeanFactory">
+<meta property="og:url" content="http://yoursite.com/posts/37871/index.html">
+<meta property="og:site_name" content="Potato Blog">
+<meta property="og:description" content="根据之前说过的，Spring的IoC容器是一个IoC Service Provider，但是我们只是知道了IoC Service Provider是什么，还不是知道其“庐山真面目”中的“容器”到底是什么，这里就介绍IoC容器之中一BeanFactory。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/posts/37871/TIM%E6%88%AA%E5%9B%BE20191017164208.png">
+<meta property="og:image" content="http://yoursite.com/posts/37871/TIM%E6%88%AA%E5%9B%BE20191017174425.png">
+<meta property="og:image" content="http://yoursite.com/posts/37871/TIM%E6%88%AA%E5%9B%BE20191018205518.png">
+<meta property="og:image" content="http://yoursite.com/posts/37871/TIM%E6%88%AA%E5%9B%BE20191018205833.png">
+<meta property="og:image" content="http://yoursite.com/posts/37871/TIM%E6%88%AA%E5%9B%BE20191018210226.png">
+<meta property="og:image" content="http://yoursite.com/posts/37871/TIM%E6%88%AA%E5%9B%BE20191018215127.png">
+<meta property="og:updated_time" content="2019-10-18T14:36:48.377Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="IoC容器之BeanFactory">
+<meta name="twitter:description" content="根据之前说过的，Spring的IoC容器是一个IoC Service Provider，但是我们只是知道了IoC Service Provider是什么，还不是知道其“庐山真面目”中的“容器”到底是什么，这里就介绍IoC容器之中一BeanFactory。">
+<meta name="twitter:image" content="http://yoursite.com/posts/37871/TIM%E6%88%AA%E5%9B%BE20191017164208.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Potato Blog" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/posts/37871/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>IoC容器之BeanFactory | Potato Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Potato Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">李土豆的Blog</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">4</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于我</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+    
+  
+  
+
+  
+
+  <article class="post post-type-normal true" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/37871/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Potato">
+      <meta itemprop="description" content="Although the road is endless and faraway, I still want to pursue the truth in the world.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potato Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">IoC容器之BeanFactory
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-17 16:11:12" itemprop="dateCreated datePublished" datetime="2019-10-17T16:11:12+08:00">2019-10-17</time>
+            </span>
+          
+
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-10-18 22:36:48" itemprop="dateModified" datetime="2019-10-18T22:36:48+08:00">2019-10-18</time>
+              </span>
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+		  
+		  
+
+          <br>
+          
+
+          
+
+          
+            <div class="post-description">根据之前说过的，Spring的IoC容器是一个IoC Service Provider，但是我们只是知道了IoC Service Provider是什么，还不是知道其“庐山真面目”中的“容器”到底是什么，这里就介绍IoC容器之中一BeanFactory。</div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Spring提供了两种容器类型：<strong>BeanFactory</strong>和<strong>ApplicationContext</strong>。</p>
+<ul>
+<li><strong>BeanFactory</strong>：基础类型的Ioc容器，提供完整的IoC服务支持。<strong>如果没有特殊指定，默认采用延迟初始化策略。即只有当客户端对象需要访问容器中的某个受管对象时，才对该受管对象进行初始化以及依赖注入操作。</strong>所以相对来说，该容器启动初期速度较快，所需要的资源有限，因此BeanFactroy比较适合用于资源有限，并且功能要求不是很严格的场景。</li>
+<li><strong>ApplicationContext</strong>：<strong>ApplicationContext是在BeanFactory的基础上构建的</strong>，是相对于高级的容器实现，因此ApplicationContext还提供了一些例如事件发布、国际化信息支持的高级特性。<strong>ApplicationContext所管理的对象，在该容器启动之后，默认全部初始化并绑定完成。</strong>所以相对BeanFactory来说，ApplicationContext要求更多的系统资源，同时启动时间也会长一些。因此ApplicationContext更适合于资源充足并且要求更多功能的场景中。</li>
+</ul>
+<p>通过下图可以对BeanFactory和ApplicationContext之间的关系有一个更清晰的认知。<img src="/posts/37871/TIM%E6%88%AA%E5%9B%BE20191017164208.png" alt></p>
+<p>BeanFactory，顾名思义就是生产Bean的工厂，而Spring提倡使用POJO，所以可以把每个业务对象看作一个JavaBean对象。BeanFactory可以完成作为IoC Service Provider的所有职责，包括业务对象的注册和对象间依赖关系的绑定。</p>
+<p>BeanFactory就像一个汽车生产厂。你从其他汽车零件厂商或者自己的零件生产部门取得汽车零件送入这个汽车生产厂，最后只需要从生产线的终点取得汽车成品就可以了。相似的，将应用程序所需的所有业务对象交给BeanFactory之后，剩下的就是直接从BeanFactory取得最终组装完成并且可用的对象。至于这个最终业务对象如何组装，你不需要担心，BeanFactory会帮你搞定。</p>
+<h1 id="拥有BeanFactory之后的生活"><a href="#拥有BeanFactory之后的生活" class="headerlink" title="拥有BeanFactory之后的生活"></a>拥有BeanFactory之后的生活</h1><p>确切的说，拥有BeanFactory之后的生活没有太大的变化，有变化的也在只是一些拉拉扯扯的事情，客观一点就是对象之间依赖关系的解决方式改变了。之前系统业务对象需要自己去“拉”所依赖的业务对象，有了BeanFactory之类的IoC之后，需要依赖什么，让BeanFactory为我们推过来就行啦。以一个FX新闻系统的例子来说，FX新闻应用设计和实现框架代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>-设计FXNewsProvider类用于普遍的新闻处理 </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FXNewsProvider</span> </span>&#123;  ... &#125;   </span><br><span class="line"> </span><br><span class="line"><span class="number">2</span>-设计IFXNewsListener接口抽象各个新闻社不同的新闻获取方式，并给出相应实现类 </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IFXNewsListener</span> </span>&#123;  ... &#125; </span><br><span class="line">以及 </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DowJonesNewsListener</span> <span class="keyword">implements</span> <span class="title">IFXNewsListener</span></span>&#123;  ... &#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="number">3</span>-设计IFXNewsPersister接口抽象不同数据访问方式，并实现相应的实现类 </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IFXNewsPersister</span> </span>&#123;  ...  &#125;   </span><br><span class="line">以及 </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DowJonesNewsPersister</span> <span class="keyword">implements</span> <span class="title">IFXNewsPersister</span> </span>&#123;  ... &#125;</span><br></pre></td></tr></table></figure>
+
+<p>BeanFactory会说，这些都让我来干吧！此时BeanFactory说这些事情让他来做，但是它并不知道该怎么做，所以就需要你来教它怎么做。通常情况下，会使用XML文件配置的方式来教它，也就是告诉BeanFactory如何来注册并管理各个业务对象之间的依赖关系。下面是BeanFactory的XML配置方式实现业务对象间的依赖关系的一个例子代码：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">beans</span>&gt;</span>   </span><br><span class="line">	<span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"djNewsProvider"</span> <span class="attr">class</span>=<span class="string">"..FXNewsProvider"</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"0"</span>&gt;</span>    </span><br><span class="line">			<span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"djNewsListener"</span>/&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;/<span class="name">constructor-arg</span>&gt;</span>    </span><br><span class="line">		<span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"1"</span>&gt;</span>    </span><br><span class="line">			<span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"djNewsPersister"</span>/&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;/<span class="name">constructor-arg</span>&gt;</span>   </span><br><span class="line">	<span class="tag">&lt;/<span class="name">bean</span>&gt;</span>  </span><br><span class="line">	... </span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在BeanFactory出现之前，我们通常会直接在应用程序的入口类的main方法中，自己动手实例化相应的对象并调用，如以下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FXNewsProvider newsProvider = <span class="keyword">new</span> FXNewsProvider();  </span><br><span class="line">newsProvider.getAndPersistNews();</span><br></pre></td></tr></table></figure>
+
+<p>不过现在有了BeanFactory，通过xml文件这张“图纸”告诉BeanFactory怎么做之后，让BeanFactory为我们生产一个FXNewsProvider，如以下代码所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">BeanFactory container = <span class="keyword">new</span> XmlBeanFactory(<span class="keyword">new</span> ClassPathResource(<span class="string">"配置文件路径"</span>)); </span><br><span class="line">FXNewsProvider newsProvider = (FXNewsProvider)container.getBean(<span class="string">"djNewsProvider"</span>); </span><br><span class="line">newsProvider.getAndPersistNews();</span><br><span class="line"></span><br><span class="line"><span class="comment">/*或者如以下代码所示*/</span> </span><br><span class="line">ApplicationContext container = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"配置文件路径"</span>); </span><br><span class="line">FXNewsProvider newsProvider = (FXNewsProvider)container.getBean(<span class="string">"djNewsProvider"</span>);  </span><br><span class="line">newsProvider.getAndPersistNews(); </span><br><span class="line"></span><br><span class="line"><span class="comment">/*也可以如以下代码所示*/</span></span><br><span class="line">ApplicationContext container = <span class="keyword">new</span> FileSystemXmlApplicationContext(<span class="string">"配置文件路径"</span>); </span><br><span class="line">FXNewsProvider newsProvider = (FXNewsProvider)container.getBean(<span class="string">"djNewsProvider"</span>); </span><br><span class="line">newsProvider.getAndPersistNews();</span><br></pre></td></tr></table></figure>
+
+<h1 id="BeanFactory的对象注册与依赖绑定方式"><a href="#BeanFactory的对象注册与依赖绑定方式" class="headerlink" title="BeanFactory的对象注册与依赖绑定方式"></a>BeanFactory的对象注册与依赖绑定方式</h1><p>为了让BeanFactory能够明确管理各个业务对象以及业务对象之间的依赖绑定关系，同样需要需要某种途径来记录和管理这些信息。与上一章的IoC Service Provider提到的三种方式，BeanFactory几乎支持所有这些方式。</p>
+<h2 id="直接编码方式"><a href="#直接编码方式" class="headerlink" title="直接编码方式"></a>直接编码方式</h2><p>先看一下使用直接编码方式FX新闻系统相关类是如何注册并绑定的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span>  </span>&#123;   </span><br><span class="line">	DefaultListableBeanFactory beanRegistry = <span class="keyword">new</span> DefaultListableBeanFactory();  </span><br><span class="line">	BeanFactory container = (BeanFactory)bindViaCode(beanRegistry);  </span><br><span class="line">	FXNewsProvider newsProvider = (FXNewsProvider)container.getBean(<span class="string">"djNewsProvider"</span>);  </span><br><span class="line">	newsProvider.getAndPersistNews(); </span><br><span class="line">&#125; </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> BeanFactory <span class="title">bindViaCode</span><span class="params">(BeanDefinitionRegistry registry)</span> </span>&#123;     </span><br><span class="line">	AbstractBeanDefinition newsProvider = <span class="keyword">new</span> RootBeanDefinition(FXNewsProvider.class,<span class="keyword">true</span>);     AbstractBeanDefinition newsListener = <span class="keyword">new</span> RootBeanDefinition(DowJonesNewsListener.class,<span class="keyword">true</span>);     AbstractBeanDefinition newsPersister = <span class="keyword">new</span> RootBeanDefinition(DowJonesNewsPersister.class,<span class="keyword">true</span>);     </span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 将bean定义注册到容器中     </span></span><br><span class="line">	registry.registerBeanDefinition(<span class="string">"djNewsProvider"</span>, newsProvider);     </span><br><span class="line">	registry.registerBeanDefinition(<span class="string">"djListener"</span>, newsListener);     </span><br><span class="line">	registry.registerBeanDefinition(<span class="string">"djPersister"</span>, newsPersister); </span><br><span class="line"></span><br><span class="line">	<span class="comment">// 指定依赖关系     </span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 1. 可以通过构造方法注入方式     </span></span><br><span class="line">	ConstructorArgumentValues argValues = <span class="keyword">new</span> ConstructorArgumentValues();   </span><br><span class="line">  	argValues.addIndexedArgumentValue(<span class="number">0</span>, newsListener);     </span><br><span class="line">	argValues.addIndexedArgumentValue(<span class="number">1</span>, newsPersister);     </span><br><span class="line">	newsProvider.setConstructorArgumentValues(argValues);     </span><br><span class="line"></span><br><span class="line">	<span class="comment">// 2. 或者通过setter方法注入方式</span></span><br><span class="line"> 	MutablePropertyValues propertyValues = <span class="keyword">new</span> MutablePropertyValues();     propertyValues.addPropertyValue(<span class="keyword">new</span> ropertyValue(<span class="string">"newsListener"</span>,newsListener));     propertyValues.addPropertyValue(<span class="keyword">new</span> PropertyValue(<span class="string">"newPersistener"</span>,newsPersister)); </span><br><span class="line">    newsProvider.setPropertyValues(propertyValues);    </span><br><span class="line"></span><br><span class="line">	<span class="comment">// 绑定完成     </span></span><br><span class="line">	<span class="keyword">return</span> (BeanFactory)registry; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>BeanFactory只是一个接口，我们最终需要一个该接口的实现来进行实际的Bean管理，DefaultListableBeanFactory就是这么一个比较通用的BeanFactory实现类。具体关系可以看下图：<img src="/posts/37871/TIM%E6%88%AA%E5%9B%BE20191017174425.png" alt>BeanDefaultListableBeanFactory除了间接的实现了BeanFactory接口，还实现了BeanDefinitionRegistry接口，该接口才是现在BeanFactory的实现中担当Bean注册管理的角色。打个比方说，BeanDefinitionRegistry就像图书馆的数加，所有的书是放在书架上的，虽然你还书借书都是跟图书馆（也就是BeanFactory）打交道，但书架才是图书馆存放各类图书的地方。</p>
+<p>基本上BeanFactory接口只定义如何访问容器内管理Bean的方法，各个BeanFactory的实现类才负责具体Bean的注册以及管理工作。BeanDefinitionRegistry接口定义抽象了Bean的注册逻辑。通常情况下，具体的BeanFactory实现类会实现这个接口来管理Bean的注册。</p>
+<p>每一个受管的对象，在容器中都会有一个BeanDefinition的实例与之相对应，该BeanDefinition的实例负责保存对象的所有必要信息，包括其对应的对象的class类型、是否是抽象类、构造方法参数以及其他属性等。当客户端向BeanFactory请求相对应对象的时候，BeanFactory会通过这些信息为客户端返回一个完备可用的对象实例。</p>
+<p>所以现在可以回到上面的代码中了，上面代码大致可以分为三个步骤：</p>
+<ol>
+<li>在main方法中，首先构造一个DefaultListableBeanFactory作为BeanDefinitionRegistry，然后将其交给bindViaCode方式进行具体的对象注册和相关逻辑管理，然后就可以通过该方法返回的BeanFactory取得需要的对象。</li>
+<li>在bindViaCode方法中，首先针对相应的业务对象构造与其相对应的BeanDefinition，使用了RootBeanDefinition作为BeanDefinition的实现类。构造完成后，将这些BeanDefinite注册到通过方法参数传进来的BeanDefinitionRegistry中。</li>
+<li>之后我们可以通过构造方法，或者setter方法，为其注入相关依赖。最后以BeanFactory的形式返回已经注册并绑定了所有相关业务对象的BeanDefinitionRegistry实例。</li>
+</ol>
+<h2 id="外部配置文件方式"><a href="#外部配置文件方式" class="headerlink" title="外部配置文件方式"></a>外部配置文件方式</h2><p>Spring的IoC容器支持两种配置文件格式：<strong>Properties文件格式</strong>和<strong>XML文件格式</strong>。</p>
+<p>采用外部配置文件时，Spring的IoC荣有一个统一的处理方式。通常情况下，需根据不同的外部配置文件格式，给出相应的BeanDefinitionReader实现类，由BeanDefinitionReader的相应实现类负责将相应的配置文件的内容读取并映射到BeanDefinition，然后将映射后的BeanDefinition注册到一个BeanDefinitionRegistry，之后BeanDefinitionRegistry即完成Bean的注册和加载。</p>
+<h3 id="Properties配置格式的加载"><a href="#Properties配置格式的加载" class="headerlink" title="Properties配置格式的加载"></a>Properties配置格式的加载</h3><p>Spring提供了PropertiesBeanDefiniteReader类用于Properties格式配置文件的加载，只需要根据该类的读取规则，提供相应的配置文件即可，示例代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">djNewsProvider.(class)=..FXNewsProvider </span><br><span class="line">djListener.(class)=..impl.DowJonesNewsListener </span><br><span class="line">djPersister.(class)=..impl.DowJonesNewsPersister </span><br><span class="line"></span><br><span class="line"># ----------通过构造方法注入的时候------------- </span><br><span class="line">djNewsProvider.$0(ref)=djListener </span><br><span class="line">djNewsProvider.$1(ref)=djPersister </span><br><span class="line"></span><br><span class="line"># ----------通过setter方法注入的时候---------  </span><br><span class="line">djNewsProvider.newsListener(ref)=djListener  </span><br><span class="line">djNewsProvider.newPersistener(ref)=djPersister</span><br></pre></td></tr></table></figure>
+
+<p>这些内容都是特定于Spring的PropertiesBeanDefinitionReader的，下面是简单的语法介绍：</p>
+<ul>
+<li>djNewsProvider作为beanName，后面通过（class）表明对应的实现类是什么，实际上使用djNewsProvider.class=…的形式也是可以的，但是不提倡。</li>
+<li>通过在表示beanName的名称后添加.$[number]后缀的形式，来表示当前beanName对应的对象需要通过构造方法注入的方式注入相应依赖对象。$0和1$1后面的（ref）用来表示所依赖的是引用对象，而不是普通的类型。如果不加（ref），则会将djListener和djPersister作为简单的String类型进行注入，异常也是自然不可避免了。</li>
+<li>setter方法注入与构造方法注入最大的区别就是，它不使用数字顺序来指定注入的位置，而使用相应的属性名称来指定注入，同样也不要忘掉（ref）。</li>
+</ul>
+<p>在使用Properties文件配置完后，就可以使用了，下面是一个使用演示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span>  </span>&#123;   </span><br><span class="line">	DefaultListableBeanFactory beanRegistry = <span class="keyword">new</span> DefaultListableBeanFactory();  </span><br><span class="line">	BeanFactory container = (BeanFactory)bindViaPropertiesFile(beanRegistry);  </span><br><span class="line">	FXNewsProvider newsProvider = (FXNewsProvider)container.getBean(<span class="string">"djNewsProvider"</span>);  </span><br><span class="line">	newsProvider.getAndPersistNews(); </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> BeanFactory <span class="title">bindViaPropertiesFile</span><span class="params">(BeanDefinitionRegistry registry)</span> </span>&#123;  </span><br><span class="line">	PropertiesBeanDefinitionReader reader =  <span class="keyword">new</span> PropertiesBeanDefinitionReader(registry);  </span><br><span class="line">	reader.loadBeanDefinitions(<span class="string">"classpath:../../binding-config.properties"</span>);  </span><br><span class="line">	<span class="keyword">return</span> (BeanFactory)registry; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="XML配置格式的加载"><a href="#XML配置格式的加载" class="headerlink" title="XML配置格式的加载"></a>XML配置格式的加载</h3><p>XML配置格式是Spring支持最完整，功能最强大，也是使用最频繁的表达方式。例子如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span> </span><br><span class="line"><span class="meta">&lt;!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd"&gt;</span> </span><br><span class="line"> </span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"djNewsProvider"</span> <span class="attr">class</span>=<span class="string">"..FXNewsProvider"</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"0"</span>&gt;</span>    </span><br><span class="line">			<span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"djNewsListener"</span>/&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;/<span class="name">constructor-arg</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"1"</span>&gt;</span>    </span><br><span class="line">			<span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"djNewsPersister"</span>/&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;/<span class="name">constructor-arg</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">bean</span>&gt;</span>    </span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"djNewsListener"</span> <span class="attr">class</span>=<span class="string">"..impl.DowJonesNewsListener"</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">bean</span>&gt;</span>  </span><br><span class="line"></span><br><span class="line">	<span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"djNewsPersister"</span> <span class="attr">class</span>=<span class="string">"..impl.DowJonesNewsPersister"</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">bean</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>相对应的加载XML配置文件的BeanFactory的使用演示如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span>  </span>&#123; </span><br><span class="line">	DefaultListableBeanFactory beanRegistry = <span class="keyword">new</span> DefaultListableBeanFactory();  </span><br><span class="line">	BeanFactory container = (BeanFactory)bindViaXMLFile(beanRegistry);  </span><br><span class="line">	FXNewsProvider newsProvider = (FXNewsProvider)container.getBean(<span class="string">"djNewsProvider"</span>); </span><br><span class="line">	newsProvider.getAndPersistNews(); </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> BeanFactory <span class="title">bindViaXMLFile</span><span class="params">(BeanDefinitionRegistry registry)</span>  </span>&#123;  </span><br><span class="line">	XmlBeanDefinitionReader reader = <span class="keyword">new</span> XmlBeanDefinitionReader(registry);  </span><br><span class="line">	reader.loadBeanDefinitions(<span class="string">"classpath:../news-config.xml"</span>); </span><br><span class="line">	<span class="keyword">return</span> (BeanFactory)registry;  </span><br><span class="line">	<span class="comment">// 或者直接  </span></span><br><span class="line">	<span class="comment">//return new XmlBeanFactory(new ClassPathResource("../news-config.xml")); </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>与Properties一样，XML同样有Spring提供的现成的BeanDefinitionReader实现，即XmlBeanDefinitionReader。</p>
+<h2 id="注解方式"><a href="#注解方式" class="headerlink" title="注解方式"></a>注解方式</h2><p>注解是Java5之后才引入的，所以相对来说也更加简洁方便一些，使用注解的方式为FXNewsProvider注入所需要的依赖，现在可以使用@Autowired以及@Component对相关类进行标记。下面是FXNews使用注解标注后的情况。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span> </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FXNewsProvider</span>  </span>&#123;  </span><br><span class="line">	<span class="meta">@Autowired</span>  </span><br><span class="line">	<span class="keyword">private</span> IFXNewsListener  newsListener;  </span><br><span class="line">	<span class="meta">@Autowired</span>  </span><br><span class="line">	<span class="keyword">private</span> IFXNewsPersister newPersistener;    </span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">FXNewsProvider</span><span class="params">(IFXNewsListener newsListner,IFXNewsPersister newsPersister)</span>  </span>&#123;   </span><br><span class="line">		<span class="keyword">this</span>.newsListener   = newsListner;   </span><br><span class="line">		<span class="keyword">this</span>.newPersistener = newsPersister;  </span><br><span class="line">	&#125;  </span><br><span class="line">	... </span><br><span class="line">&#125; </span><br><span class="line"> </span><br><span class="line"><span class="meta">@Component</span> </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DowJonesNewsListener</span> <span class="keyword">implements</span> <span class="title">IFXNewsListener</span>  </span>&#123;  ... &#125; </span><br><span class="line"> </span><br><span class="line"><span class="meta">@Component</span> </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DowJonesNewsPersister</span> <span class="keyword">implements</span> <span class="title">IFXNewsPersister</span>  </span>&#123;  ... &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>@Autowired是这里的主角，它的存在将告知Spring容器需要为当前对象注入哪些依赖对象。而@Component则是配合Spring中的classpath-scanning功能使用。现在我们只要再向Spring的配置文件中增加一个“触发器”，使用@Autowired和@Component标注的类就能获得依赖对象的注入了。</strong>下面是在配置文件中配置的方法：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span> </span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.org/schema/beans"</span> </span></span><br><span class="line"><span class="tag">	<span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> </span></span><br><span class="line"><span class="tag">	<span class="attr">xmlns:context</span>=<span class="string">"http://www.springframework.org/schema/context"</span> </span></span><br><span class="line"><span class="tag">	<span class="attr">xmlns:tx</span>=<span class="string">"http://www.springframework.org/schema/tx"</span> </span></span><br><span class="line"><span class="tag">	<span class="attr">xsi:schemaLocation</span>=<span class="string">"http://www.springframework.org/schema/beans </span></span></span><br><span class="line"><span class="tag"><span class="string">	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd </span></span></span><br><span class="line"><span class="tag"><span class="string">	http://www.springframework.org/schema/context </span></span></span><br><span class="line"><span class="tag"><span class="string">	http://www.springframework.org/schema/context/spring-context-2.5.xsd </span></span></span><br><span class="line"><span class="tag"><span class="string">	http://www.springframework.org/schema/tx </span></span></span><br><span class="line"><span class="tag"><span class="string">	http://www.springframework.org/schema/tx/spring-tx-2.5.xsd"</span>&gt;</span> </span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">"cn.spring21.project.base.package"</span>/&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong><a href="context:component-scan" target="_blank" rel="noopener">context:component-scan</a>会到指定的包下面扫描有@Component的类，如果找到，则将他们添加到容器进行管理，并根据它们所标注的@Autowired为这些类注入符合条件的依赖对象。</strong>所以在做完上面的工作之后，就可以使用了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;  </span><br><span class="line">	ApplicationContext ctx = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"配置文件路径"</span>);  </span><br><span class="line">	FXNewsProvider newsProvider = (FXNewsProvider)container.getBean(<span class="string">"FXNewsProvider"</span>); </span><br><span class="line">	newsProvider.getAndPersistNews(); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="XML配置方法"><a href="#XML配置方法" class="headerlink" title="XML配置方法"></a>XML配置方法</h1><p>XML格式的容器信息管理方式是Spring提供的最为强大、支持最为全面的方式，因此在这里讲述一下XML文件的以标签和一些属性。</p>
+<h2 id="lt-beans-gt-和-lt-bean-gt"><a href="#lt-beans-gt-和-lt-bean-gt" class="headerlink" title="&lt;beans&gt;和&lt;bean&gt;"></a>&lt;beans&gt;和&lt;bean&gt;</h2><p>所有的Spring容器加载的XML配置文件的头部，都需要基于文档声明，而DTD和XSD的声明方式不一样，下面是一个对比：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- DTD方式 --&gt;</span></span><br><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>  </span><br><span class="line"><span class="meta">&lt;!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" ➥ "http://www.springframework.org/dtd/spring-beans.dtd"&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span>&gt;</span>  ... <span class="tag">&lt;/<span class="name">beans</span>&gt;</span> </span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- XSD方式 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.org/schema/beans"</span> </span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> </span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:util</span>=<span class="string">"http://www.springframework.org/schema/util"</span> </span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:jee</span>=<span class="string">"http://www.springframework.org/schema/jee"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:lang</span>=<span class="string">"http://www.springframework.org/schema/lang"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:aop</span>=<span class="string">"http://www.springframework.org/schema/aop"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:tx</span>=<span class="string">"http://www.springframework.org/schema/tx"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">xsi:schemaLocation</span>=<span class="string">"http://www.springframework.org/schema/beans  </span></span></span><br><span class="line"><span class="tag"><span class="string">http://www.springframework.org/schema/beans/spring-beans-2.0.xsd  </span></span></span><br><span class="line"><span class="tag"><span class="string">http://www.springframework.org/schema/util </span></span></span><br><span class="line"><span class="tag"><span class="string">http://www.springframework.org/schema/util/spring-util-2.0.xsd  </span></span></span><br><span class="line"><span class="tag"><span class="string">http://www.springframework.org/schema/jee </span></span></span><br><span class="line"><span class="tag"><span class="string">http://www.springframework.org/schema/jee/spring-jee-2.0.xsd </span></span></span><br><span class="line"><span class="tag"><span class="string">http://www.springframework.org/schema/lang </span></span></span><br><span class="line"><span class="tag"><span class="string">http://www.springframework.org/schema/lang/spring-lang-2.0.xsd </span></span></span><br><span class="line"><span class="tag"><span class="string">http://www.springframework.org/schema/aop </span></span></span><br><span class="line"><span class="tag"><span class="string">http://www.springframework.org/schema/aop/spring-aop-2.0.xsd  </span></span></span><br><span class="line"><span class="tag"><span class="string">http://www.springframework.org/schema/tx </span></span></span><br><span class="line"><span class="tag"><span class="string">http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"</span>&gt;</span>   </span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>所有注册到容器的业务对象，在Spring中称之为Bean。所以，每一个对象在XML的映射中也自然而然的对应一个&lt;bean&gt;。既然容器最终可以管理所有的业务对象，那么XML中把这些叫做&lt;bean&gt;的元素组织起来，就叫做&lt;beans&gt;。</p>
+<h3 id="lt-beans-gt-之唯我独尊"><a href="#lt-beans-gt-之唯我独尊" class="headerlink" title="&lt;beans&gt;之唯我独尊"></a>&lt;beans&gt;之唯我独尊</h3><p>&lt;beans&gt;是XML配置我呢见中最顶层的元素，它下面可以包含0或者1个&lt;description&gt;和多个&lt;bean&gt;以及&lt;import&gt;或者&lt;alias&gt;。&lt;beans&gt;作为所有<bean>的“统帅”，它拥有相应的属性对所辖的&lt;bean&gt;进行统一的默认行为设置，包括如下几个：</bean></p>
+<ul>
+<li><strong>default-lazy-init</strong>:其值可以指定为true或者false，默认值为false。用来标志是否对所有的&lt;bean&gt;进行延迟初始化，但是指定为true时并不一定会延迟初始化，如果某个非延迟的bean依赖于该bean，那么该bean就不会延迟初始化。</li>
+<li><strong>default-autowire</strong>：可以取值为no-不采取任何形式的自动绑定，完全依赖于手工明确配置、byName-与XML文件中声明的bean定义的beanName的值进行匹配、byType-会根据当前bean定义类型，按类型匹配、constructor-同样是按类型绑定，但是是匹配构造放的参数类型，而不是实例属性的类型，以及autodetect-byTye和constructor的结合体，如果是无参构造方法则是由byType，否则使用constructor模式。默认为no。如果使用自动绑定的话，用来标志全体bean使用哪一种默认绑定方式。</li>
+<li><strong>default-dependency-check</strong>：可以取值为none-不检查、objects-只对对象引用类型依赖进行检查、simple-对简单属性类型以及相关的collection进行依赖检查，对象引用类型的依赖除外，以及all-simple和objects的结合，默认为none，即不做检查。</li>
+<li><strong>default-init-method</strong>：如果所管辖的所有&lt;bean&gt;都有同样名称的初始化方法，可以在这里统一指定这个初始化方法名，而不用每一个单独指定。</li>
+<li><strong>default-destroy-method</strong>：与default-init-method相对应，如果所管辖的所有&lt;bean&gt;都有同样名称的销毁方法，可以在这里统一指定这个销毁方法名，而不用每一个单独指定。</li>
+</ul>
+<h3 id="lt-description-gt-、-lt-import-gt-和-lt-alias-gt"><a href="#lt-description-gt-、-lt-import-gt-和-lt-alias-gt" class="headerlink" title="&lt;description&gt;、&lt;import&gt;和&lt;alias&gt;"></a>&lt;description&gt;、&lt;import&gt;和&lt;alias&gt;</h3><p>这几个元素通常情况下不是必须的，这里只是了解一下。</p>
+<ul>
+<li><strong>&lt;description&gt;</strong>：在配置文件中指定一些描述性的信息。</li>
+<li><strong>&lt;import&gt;</strong>：可以在主要的配置文件中通过这个标签元素对其所依赖的配置文件引用，例如在A文件中&lt;import resource=”B.xml”&gt;</li>
+<li><strong>&lt;alias&gt;</strong>：为某些&lt;bean&gt;起一些别名，通常情况下是为了减少输入。</li>
+</ul>
+<h2 id="孤孤单单的id和class"><a href="#孤孤单单的id和class" class="headerlink" title="孤孤单单的id和class"></a>孤孤单单的id和class</h2><h3 id="id属性"><a href="#id属性" class="headerlink" title="id属性"></a>id属性</h3><p>通常，每个注册到容器的对象都需要一个唯一标志来将其与同处一室的bean兄弟们区分开来，通过id属性来指定当前注册对象的beanName是什么。实际上并非任何情况下都需要指定每个&lt;bean&gt;的id，有些情况下可以省略，会在后面提到。</p>
+<p>除了使用id来指定&lt;bean&gt;在容器中的标志，还可以使用name属性来指定&lt;bean&gt;的别名。name比id灵活之处在于，name可以使用id不能使用的一些字符，比如、。而且还可以通过逗号、空格或者冒号分割指定多个name。name的作用和alias的作用基本相同。</p>
+<h3 id="class属性"><a href="#class属性" class="headerlink" title="class属性"></a>class属性</h3><p>每个注册到容器的对象都需要通过&lt;bean&gt;元素的class属性指定其类型。在大部分情况下该属性都是必须的，仅在少数情况下不需要指定，后面会提到。</p>
+<h2 id="XML中的继承"><a href="#XML中的继承" class="headerlink" title="XML中的继承"></a>XML中的继承</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"newsProviderTemplate"</span> <span class="attr">abstract</span>=<span class="string">"true"</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"newPersistener"</span>&gt;</span>    </span><br><span class="line">		<span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"djNewsPersister"</span>/&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span>  </span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"superNewsProvider"</span> <span class="attr">parent</span>=<span class="string">"newsProviderTemplate"</span>   <span class="attr">class</span>=<span class="string">"..FXNewsProvider"</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"newsListener"</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"djNewsListener"</span>/&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"> </span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"subNewsProvider"</span> <span class="attr">parent</span>=<span class="string">"newsProviderTemplate"</span>   <span class="attr">class</span>=<span class="string">"..SpecificFXNewsProvider"</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"newsListener"</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"specificNewsListener"</span>/&gt;</span>   </span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt; /<span class="attr">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>根据上面的代码可以看出，我们在声明superNewsProvider和subNewsProvider的时候，使用了parent属性，将其值指定为newsProviderTemplate，这样我们就继承了newsProviderTemplate定义的默认值，只需要将指定的属性进行更改，而不要全部又重新定义一遍。</p>
+<p>parent属性还可以与abstract属性结合使用，达到将相应bean定义模板化的目的。newsProviderTemplate的bean定义通过abstract属性声明为true，说明这个bean定义不需要实例化，<strong>这就是之前提到的可以不指定class属性的少数场景之一。</strong>该bean只是配置一个模板，不对应任何对象，superNewsProvider和subNewsProvider通过parent指向这个模板定义，就拥有了该模板定义的所有属性配置。</p>
+<p><strong>容器在初始化对象实例的时候，不会关注abstract的bean。如果你不想容器在初始化对象实例的时候，那么可以将其abstract属性赋值为true，以避免容器将其实例化。同样对于ApplicationContext也是如此。</strong></p>
+<h2 id="bean的scope（作用域）"><a href="#bean的scope（作用域）" class="headerlink" title="bean的scope（作用域）"></a>bean的scope（作用域）</h2><p>scope用来声明容器中的对象所应该处的限定场景或者说该对象的存活时间，即容器在对象进入相应的scope之前，生产并装配这些对象，在该对象不在处于这些scope的限定之后，容器通常会销毁这些对象。</p>
+<p>Spring最初提供了两种bean的scope类型：singleton和prototype，但是2.0发布之后，又引入了另外三种scope类型，即request、session和globa session类型，对应这三种类型只能在Web应用中使用。</p>
+<h3 id="singleton"><a href="#singleton" class="headerlink" title="singleton"></a>singleton</h3><p><strong>标记为拥有singleton scope的对象定义，在Spring的IoC容器中只存在一个实例，所有对该对象的引用将共享这个实例，也就是说它与IoC容器的寿命“几乎”相同。</strong></p>
+<p><strong>不要将这里的singleton与设计模式中的singleton相混淆。二者的语义是不同的：标记为singleton的bean是由容器来保证这种类型的bean在同一个容器中只存在一个共享实例；而Singleton模式则是保证在同一个Classloader中只存在一个这种类型的实例。</strong></p>
+<p>可以从两个方面看singleton的bean所具有的特性：</p>
+<ul>
+<li><strong>对象实例数量</strong>：singleton的bean定义，在一个容器中只存在一个共享实例，所有对该类型bean的依赖都引用这一单一实例。</li>
+<li><strong>对象存活时间</strong>：singleton类型bean定义，从容器启动，到它第一次被请求而实例化开始，只要容器不销毁或者退出，该类型bean的单一实例就会一直存活。</li>
+</ul>
+<p><strong>通常情况下，如果你不指定bean的scope，singleton便是容器默认的scope。</strong></p>
+<h3 id="prototype"><a href="#prototype" class="headerlink" title="prototype"></a>prototype</h3><p><strong>针对声明为拥有prototype scope的bean定义，容器在接到该类型对象的请求的时候，会每次都重新生成一个新的对象实例给请求方。虽然这种类型的对象的实例化以及属性设置等工作都是由容器负责的，但是只要准备完毕，并且对象实例返回给请求方之后，容器就不再拥有当前返回对象的引用，请求方需要自己负责当前返回对象的后继生命周期的管理工具，包括销毁。</strong></p>
+<p>所以对于那些请求不能共享使用的对象类型，应该将其bean定义的scope设置为prototype，这样可以用它来保存一些用户的状态信息。</p>
+<h3 id="request"><a href="#request" class="headerlink" title="request"></a>request</h3><p><strong>Spring容器，即XmlWebApplicationContext会为每一个HTTP请求创建一个全新的RequestProcessor对象供当前请求使用，当请求结束后，该对象实例的生命周期即告结束。</strong></p>
+<h3 id="session"><a href="#session" class="headerlink" title="session"></a>session</h3><p>Spring容器会为每个独立的session创建属于它们自己的全新的UserPreferences对象实例。与request相比，除了可能有更长的存活时间，其它方面真是没什么区别。</p>
+<h3 id="global-session"><a href="#global-session" class="headerlink" title="global session"></a>global session</h3><p>global session只应用于基于porlet的Web应用程序中才有意义，在普通的基于servlet的Web应用中使用了这个类型的scope，容器会将其作为普通的session类型对待。</p>
+<h3 id="自定义scope"><a href="#自定义scope" class="headerlink" title="自定义scope"></a>自定义scope</h3><p>默认的singleton和prototype是硬编码到代码中的，而request、session和globa session，包括自定义scope类型，都实现了Scope接口，该接口定义如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Scope</span> </span>&#123;    </span><br><span class="line">	<span class="function">Object <span class="title">get</span><span class="params">(String name, ObjectFactory objectFactory)</span></span>; </span><br><span class="line">	</span><br><span class="line">	<span class="function">Object <span class="title">remove</span><span class="params">(String name)</span></span>;  </span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">registerDestructionCallback</span><span class="params">(String name, Runnable callback)</span></span>; </span><br><span class="line"> </span><br><span class="line">	<span class="function">String <span class="title">getConversationId</span><span class="params">()</span></span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>要实现自己的scope类型，首先要给出一个Scope接口的实现类，并非4个方法都是必须的，<strong>但get和remove方法必须实现。</strong>下面是一个例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadScope</span> <span class="keyword">implements</span> <span class="title">Scope</span> </span>&#123; </span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> ThreadLocal threadScope = <span class="keyword">new</span> ThreadLocal() &#123;       </span><br><span class="line">		<span class="function"><span class="keyword">protected</span> Object <span class="title">initialValue</span><span class="params">()</span> </span>&#123;         </span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">new</span> HashMap();       </span><br><span class="line">		&#125;      </span><br><span class="line">	&#125;;      </span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">get</span><span class="params">(String name, ObjectFactory objectFactory)</span> </span>&#123;     </span><br><span class="line">		Map scope = (Map) threadScope.get();     </span><br><span class="line">		Object object = scope.get(name);     </span><br><span class="line">		<span class="keyword">if</span>(object==<span class="keyword">null</span>) &#123;       </span><br><span class="line">			object = objectFactory.getObject();        </span><br><span class="line">			scope.put(name, object);     </span><br><span class="line">		&#125;     </span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> object;    </span><br><span class="line">	&#125; </span><br><span class="line">   </span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">remove</span><span class="params">(String name)</span> </span>&#123;     </span><br><span class="line">		Map scope = (Map) threadScope.get();     </span><br><span class="line">		<span class="keyword">return</span> scope.remove(name);   </span><br><span class="line">	&#125; </span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerDestructionCallback</span><span class="params">(String name, Runnable callback)</span> </span>&#123;   </span><br><span class="line">	&#125;   </span><br><span class="line">	... </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下来就是把这个新定义的scope注册到容器中，才能供相应的bean使用。我们有两种方式可以注册。</p>
+<p>一种就是我们可以使用ConfigurableBeanFactory的以下方法去注册：<code>void registerScope(String scopeName, Scope scope)</code>，其中参数scopeName就是使用的bean定义可以指定的名称，参数scope就是我们提供的scope实现类实例。注册例子如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Scope threadScope = <span class="keyword">new</span> ThreadScope(); </span><br><span class="line">beanFactory.registerScope(<span class="string">"thread"</span>,threadScope);</span><br></pre></td></tr></table></figure>
+
+<p>另一种方式就是可以在xml文件中配置CustomScopeConfigurer来注册scope。例如“</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"org.springframework.beans.factory.config.CustomScopeConfigurer"</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"scopes"</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">map</span>&gt;</span>    </span><br><span class="line">			<span class="tag">&lt;<span class="name">entry</span> <span class="attr">key</span>=<span class="string">"thread"</span> <span class="attr">value</span>=<span class="string">"com.foo.ThreadScope"</span>/&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;/<span class="name">map</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>接下来就可以使用这个自定义的scope了，例如：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"beanName"</span> <span class="attr">class</span>=<span class="string">"..."</span> <span class="attr">scope</span>=<span class="string">"thread"</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">aop:scoped-proxy</span>/&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="工厂方法与FactoryBean"><a href="#工厂方法与FactoryBean" class="headerlink" title="工厂方法与FactoryBean"></a>工厂方法与FactoryBean</h2><p>工厂方法（Factory Method）模式，提供一个工厂类来实例化具体的接口实现类，这样主体对象只需要依赖工厂类，具体使用的实现类有变更的话，只是变更工厂类，而主体对象不需要做任何变动，这样就避免了接口与实现类的耦合性。</p>
+<p>针对这种方式，Spring的IoC容器同样提供了对应的集成支持，我们要做的，只是将工厂类所返回的具体的接口实现类注入给主体对象。</p>
+<h3 id="静态工厂方法"><a href="#静态工厂方法" class="headerlink" title="静态工厂方法"></a>静态工厂方法</h3><p>假设现在有一个接口BarInterface，为了向使用该接口的客户端对象屏蔽以后可能对BarInterface实现类的变动，因此还提供了一个静态的工厂方法实现类StaticBarInterfaceFactory，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StaticBarInterfaceFactory</span> </span>&#123;  </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> BarInterface <span class="title">getInstance</span><span class="params">()</span>  </span>&#123;  </span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> BarInterfaceImpl();  </span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>为了将该静态方法类返回的实现注入Foo，我们使用以下方式进行配置：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"foo"</span> <span class="attr">class</span>=<span class="string">"...Foo"</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"barInterface"</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"bar"</span>/&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span> </span><br><span class="line"> </span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"bar"</span> <span class="attr">class</span>=<span class="string">"...StaticBarInterfaceFactory"</span> <span class="attr">factory-method</span>=<span class="string">"getInstance"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>class指定静态方法工厂类，factory-method指定工厂方法名称，然后，容器调用该静态方法工厂类的指定工厂方法，并返回方法调用后的结果，即BarInterfaceImpl的实例。</strong></p>
+<p>某些时候，有的工厂类的工厂方法需要参数来返回相应实例，可以通过&lt;constructor-arg&gt;来指定工厂方法需要的参数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StaticBarInterfaceFactory</span> </span>&#123;  </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> BarInterface <span class="title">getInstance</span><span class="params">(Foobar foobar)</span>  </span>&#123;   </span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> BarInterfaceImpl(foobar);  </span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"foo"</span> <span class="attr">class</span>=<span class="string">"...Foo"</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"barInterface"</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"bar"</span>/&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span> </span><br><span class="line"> </span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"bar"</span> <span class="attr">class</span>=<span class="string">"...StaticBarInterfaceFactory"</span> <span class="attr">factory-method</span>=<span class="string">"getInstance"</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">constructor-arg</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"foobar"</span>/&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">constructor-arg</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span> </span><br><span class="line"> </span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"foobar"</span> <span class="attr">class</span>=<span class="string">"...FooBar"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>唯一需要注意的是，针对静态工厂方法实现类的bean定义，使用&lt;constructor-arg&gt;传入的是工厂方法的参数，而不是静态工厂方法的构造方法的参数，况且，静态工厂方法实现类也没有提供显式的构造方法。</strong></p>
+<h3 id="非静态工厂方法"><a href="#非静态工厂方法" class="headerlink" title="非静态工厂方法"></a>非静态工厂方法</h3><p>针对非静态方法的调用方式也很简单，只是需要稍微该变一下代码即可：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NonStaticBarInterfaceFactory</span>  </span>&#123;  </span><br><span class="line">	<span class="function"><span class="keyword">public</span> BarInterface <span class="title">getInstance</span><span class="params">()</span>  </span>&#123;   </span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> BarInterfaceImpl();   </span><br><span class="line">	&#125;  </span><br><span class="line">	... </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"foo"</span> <span class="attr">class</span>=<span class="string">"...Foo"</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"barInterface"</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"bar"</span>/&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span> </span><br><span class="line"> </span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"barFactory"</span> <span class="attr">class</span>=<span class="string">"...NonStaticBarInterfaceFactory"</span>/&gt;</span>   </span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attr">bean</span> <span class="attr">id</span>=<span class="string">"bar"</span> <span class="attr">factory-bean</span>=<span class="string">"barFactory"</span> <span class="attr">factory-method</span>=<span class="string">"getInstance"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>现在的最主要不同就在于是使用factory-bean属性来指定工厂方法所在的工厂类实例，而不是通过class属性来指定工厂方法所在类的类型。</strong>如果需要参数的话，配置方法同静态工厂方法一样。</p>
+<h3 id="FactoryBean"><a href="#FactoryBean" class="headerlink" title="FactoryBean"></a>FactoryBean</h3><p>当某些对象的实例化过程因为繁琐，使用XML配置过于复杂时，就可以考虑通过代码的方式来完成这个实例化过程，FactoryBean接口就是为此而生的。FactoryBean接口只定义了三个方法，如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">FactoryBean</span> </span>&#123; </span><br><span class="line">	<span class="function">Object <span class="title">getObject</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>;  </span><br><span class="line">	<span class="function">Class <span class="title">getObjectType</span><span class="params">()</span></span>;  </span><br><span class="line">	<span class="function"><span class="keyword">boolean</span> <span class="title">isSingleton</span><span class="params">()</span></span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>getObject()方法会返回该FactoryBean生产的对象实例，我们需要实现该方法以给出自己的对象实例化逻辑；</strong></li>
+<li><strong>getObjectType()方法仅返回getObject()方法所返回的对象的类型，如果预先无法确定，则返回null；</strong></li>
+<li><strong>isSingleton()方法返回结果用于表明是否为单例实例。</strong></li>
+</ul>
+<p>这是一个例子，得到第二天的日期：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NextDayDateFactoryBean</span> <span class="keyword">implements</span> <span class="title">FactoryBean</span> </span>&#123; </span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">getObject</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;   </span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> DateTime().plusDays(<span class="number">1</span>);  </span><br><span class="line">	&#125; </span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> Class <span class="title">getObjectType</span><span class="params">()</span> </span>&#123;   </span><br><span class="line">		<span class="keyword">return</span> DateTime.class;  </span><br><span class="line">	&#125; </span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSingleton</span><span class="params">()</span> </span>&#123;   </span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">false</span>;  </span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下来只需要将其注册到容器中即可：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"nextDayDateDisplayer"</span> <span class="attr">class</span>=<span class="string">"...NextDayDateDisplayer"</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"dateOfNextDay"</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"nextDayDate"</span>/&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span>         </span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"nextDayDate"</span> <span class="attr">class</span>=<span class="string">"...NextDayDateFactoryBean"</span>&gt;</span> <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>接下来就是最重要的地方，来看看NextDayDateDisplayer的定义：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NextDayDateDisplayer</span> </span>&#123;  </span><br><span class="line">	<span class="keyword">private</span> DateTime dateOfNextDay;  </span><br><span class="line">	<span class="comment">// 相应的setter方法  </span></span><br><span class="line">	<span class="comment">// ... </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>NextDayDateDisplayer所声明的依赖dateOfNextDay的类型为DateTime，而不是NextDayDateFactoryBean，也就是说FactoryBean类型的bean定义，通过正常id引用，容器返回的时FactoryBean所生产的对象类型，而非其本身。当然如果一定要取得FactoryBean本身的话，可以通过bean定义的id之前加前缀“&amp;”来达到目的。</strong></p>
+<h2 id="方法注入以及方法替换"><a href="#方法注入以及方法替换" class="headerlink" title="方法注入以及方法替换"></a>方法注入以及方法替换</h2><p>在引出标题内容之前，需要先提一下有关bean的scope的prototype属性的陷阱，我们知道，拥有prototype类型scope的bean，在请求方法每次向容器请求该类型对象的时候，容器都会返回一个全新的该对象实例，下面看看这个情况：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MockNewsPersister</span> <span class="keyword">implements</span> <span class="title">IFXNewsPersister</span> </span>&#123;  </span><br><span class="line">	<span class="keyword">private</span> FXNewsBean newsBean;    </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">persistNews</span><span class="params">(FXNewsBean bean)</span> </span>&#123;   </span><br><span class="line">		persistNewes();  </span><br><span class="line">	&#125;  </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">persistNews</span><span class="params">()</span>  </span>&#123;   </span><br><span class="line">		System.out.println(<span class="string">"persist bean:"</span>+getNewsBean());  </span><br><span class="line">	&#125;  </span><br><span class="line">	<span class="function"><span class="keyword">public</span> FXNewsBean <span class="title">getNewsBean</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">		<span class="keyword">return</span> newsBean;  </span><br><span class="line">	&#125; </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setNewsBean</span><span class="params">(FXNewsBean newsBean)</span> </span>&#123;   </span><br><span class="line">	<span class="keyword">this</span>.newsBean = newsBean;  </span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>配置为：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"newsBean"</span> <span class="attr">class</span>=<span class="string">"..domain.FXNewsBean"</span> <span class="attr">singleton</span>=<span class="string">"false"</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span> </span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"mockPersister"</span> <span class="attr">class</span>=<span class="string">"..impl.MockNewsPersister"</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"newsBean"</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"newsBean"</span>/&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>当我们多次调用MockNewsPersister的persistNews时，看看结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">BeanFactory container = <span class="keyword">new</span> XmlBeanFactory(<span class="keyword">new</span> ClassPathResource(<span class="string">".."</span>)); </span><br><span class="line">MockNewsPersister persister = (MockNewsPersister)container.getBean(<span class="string">"mockPersister"</span>); </span><br><span class="line">persister.persistNews(); persister.persistNews(); </span><br><span class="line"></span><br><span class="line">输出： </span><br><span class="line">persist bean:..domain.FXNewsBean@<span class="number">1662</span>dc8 </span><br><span class="line">persist bean:..domain.FXNewsBean@<span class="number">1662</span>dc8</span><br></pre></td></tr></table></figure>
+
+<p>从输出看对象实例是相同的，而这与我们的初衷时相悖的。问题实际上不出在FXNewsBean的scope类型是否是prototype的，而是出在实例的取得方式上面。<strong>虽然FXNewsBean拥有prototype类型的scope，但当容器将一个FXNewsBean的实例注入MockNewsPersister之后，MockNewsPersister就会一直持有这个FXNewsBean实例的引用。虽然每次输出都调用了getNewBean()方法并返回一个FXNewsBean的实例，但实际上每次返回的都是MockNewsPersister持有的容器第一次注入的实例。这就是问题之所在</strong>。</p>
+<p><strong>换句话说，第一个实例注入后，MockNewsPersister再也没有重新想容器申请新的实例，所以容器也不会重新为其注入新的FXNewsBean类型的实例。</strong></p>
+<p>下面就是介绍解决这个问题的方法了。</p>
+<h3 id="方法注入"><a href="#方法注入" class="headerlink" title="方法注入"></a>方法注入</h3><p><strong>若要使用方法注入的方式，该方法必须能够被子类实现或者覆写，因为容器会为我们要进行方法注入的对象使用Cglib动态生成一个子类实现，从而代替当前对象，</strong>既然我们的getNewsBean()方法已经满足以上方法声明要求，就只需要正确配置该类了：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"newsBean"</span> <span class="attr">class</span>=<span class="string">"..domain.FXNewsBean"</span> <span class="attr">singleton</span>=<span class="string">"false"</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span> </span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"mockPersister"</span> <span class="attr">class</span>=<span class="string">"..impl.MockNewsPersister"</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">lookup-method</span> <span class="attr">name</span>=<span class="string">"getNewsBean"</span> <span class="attr">bean</span>=<span class="string">"newsBean"</span>/&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>通过&lt;lookup-method&gt;的name属性指定需要注入的方法名，bean属性指定需要注入的对象，当getNewsBean方法被调用的时候，容器可以每次返回一个新的FXNewsBean类型的实例。所以这个时候再次检查执行结果，输出的实例引用就是不同的了。</strong></p>
+<h3 id="殊途同归"><a href="#殊途同归" class="headerlink" title="殊途同归"></a>殊途同归</h3><p>除了使用方法注入来达到“每次调用都让容器返回新的对象实例”的目的，还可以使用其他方式达到相同的目的：</p>
+<ul>
+<li><strong>使用BeanFactoryAware</strong>：我们知道，即使没有方法注入，只要在实现getNewsBean()方法的时候，能够保证每次调用BeanFactory的getBean(“newsBean”)，就同样可以每次都取得新的FXNewsBean对象实例。BeanFactoryAware接口就可以帮我们完成这一步，其定义如下：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BeanFactoryAware</span> </span>&#123;   </span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">setBeanFactory</span><span class="params">(BeanFactory beanFactory)</span> <span class="keyword">throws</span> BeansException</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>实现BeanFactoryAware接口和配置的代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MockNewsPersister</span> <span class="keyword">implements</span> <span class="title">IFXNewsPersister</span>,<span class="title">BeanFactoryAware</span> </span>&#123;  </span><br><span class="line">	<span class="keyword">private</span> BeanFactory beanFactory;    </span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBeanFactory</span><span class="params">(BeanFactory bf)</span> <span class="keyword">throws</span> BeansException </span>&#123;   </span><br><span class="line">		<span class="keyword">this</span>.beanFactory = bf;  </span><br><span class="line">	&#125;   </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">persistNews</span><span class="params">(FXNewsBean bean)</span> </span>&#123;   </span><br><span class="line">		persistNews();  </span><br><span class="line">	&#125;  </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">persistNews</span><span class="params">()</span> </span>&#123;   </span><br><span class="line">		System.out.println(<span class="string">"persist bean:"</span>+getNewsBean());  </span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> FXNewsBean <span class="title">getNewsBean</span><span class="params">()</span> </span>&#123;   </span><br><span class="line">		<span class="keyword">return</span> beanFactory.getBean(<span class="string">"newsBean"</span>);</span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"newsBean"</span> <span class="attr">class</span>=<span class="string">"..domain.FXNewsBean"</span> <span class="attr">singleton</span>=<span class="string">"false"</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span> </span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"mockPersister"</span> <span class="attr">class</span>=<span class="string">"..impl.MockNewsPersister"</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>使用ObjectFatoryCreatingFatoryBean</strong>：实际上ObjectFatoryCreatingFatoryBean实现了BeanFactoryAware接口，它返回的ObjectFactory实例这是特定于与Spring容器进行交互的一个实现而已。<strong>使用它的好处就是，隔离了客户端对象对BeanFactory的直接引用。</strong><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MockNewsPersister</span> <span class="keyword">implements</span> <span class="title">IFXNewsPersister</span> </span>&#123;  </span><br><span class="line">	<span class="keyword">private</span> ObjectFactory newsBeanFactory;     </span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">persistNews</span><span class="params">(FXNewsBean bean)</span> </span>&#123;   </span><br><span class="line">		persistNews();  </span><br><span class="line">	&#125;  </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">persistNews</span><span class="params">()</span>  </span>&#123;   </span><br><span class="line">		System.out.println(<span class="string">"persist bean:"</span>+getNewsBean());  </span><br><span class="line">	&#125;  </span><br><span class="line">	<span class="function"><span class="keyword">public</span> FXNewsBean <span class="title">getNewsBean</span><span class="params">()</span> </span>&#123;   </span><br><span class="line">		<span class="keyword">return</span> newsBeanFactory.getObject();  </span><br><span class="line">	&#125;  </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setNewsBeanFactory</span><span class="params">(ObjectFactory newsBeanFactory)</span> </span>&#123;   </span><br><span class="line">		<span class="keyword">this</span>.newsBeanFactory = newsBeanFactory;  </span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"newsBean"</span> <span class="attr">class</span>=<span class="string">"..domain.FXNewsBean"</span> <span class="attr">singleton</span>=<span class="string">"false"</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span> </span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"newsBeanFactory"</span> <span class="attr">class</span>=<span class="string">"org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean"</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"targetBeanName"</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">idref</span> <span class="attr">bean</span>=<span class="string">"newsBean"</span>/&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span> </span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"mockPersister"</span> <span class="attr">class</span>=<span class="string">"..impl.MockNewsPersister"</span>&gt;</span> </span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"newsBeanFactory"</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"newsBeanFactory"</span>/&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="方法替换"><a href="#方法替换" class="headerlink" title="方法替换"></a>方法替换</h3><p>基本上可以认为，方法替换可以帮助我们实现简单的方法拦截功能。假设某天我看FXNewsProvider不爽，想替换掉它的getAndPersistNews方法默认逻辑，这是我就可以用方法替换将它的原有逻辑给替换掉。</p>
+<p>替换的方法就是实现一个叫做MethodReplacer接口，简单的实现例子如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FXNewsProviderMethodReplacer</span> <span class="keyword">implements</span> <span class="title">MethodReplacer</span> </span>&#123; </span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">transient</span> Log logger = LogFactory.getLog(FXNewsProviderMethodReplacer.class);    </span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">reimplement</span><span class="params">(Object target, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;   </span><br><span class="line">		logger.info(<span class="string">"before executing method["</span>+method.getName()+ <span class="string">"] on Object["</span>+target.getClass().getName()+<span class="string">"]."</span>);      </span><br><span class="line">		System.out.println(<span class="string">"sorry,We will do nothing this time."</span>);    </span><br><span class="line">		logger.info(<span class="string">"end of executing method["</span>+method.getName()+ <span class="string">"] on Object["</span>+target.getClass().getName()+<span class="string">"]."</span>);   </span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">null</span>;   </span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下来把它配置到xml文件中就可以了：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"djNewsProvider"</span> <span class="attr">class</span>=<span class="string">"..FXNewsProvider"</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"0"</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"djNewsListener"</span>/&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">constructor-arg</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"1"</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"djNewsPersister"</span>/&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">constructor-arg</span>&gt;</span>  </span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">replaced-method</span> <span class="attr">name</span>=<span class="string">"getAndPersistNews"</span> <span class="attr">replacer</span>=<span class="string">"providerReplacer"</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">replaced-method</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span> </span><br><span class="line"> </span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"providerReplacer"</span> <span class="attr">class</span>=<span class="string">"..FXNewsProviderMethodReplacer"</span>&gt;</span> <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="容器加载过程"><a href="#容器加载过程" class="headerlink" title="容器加载过程"></a>容器加载过程</h1><p>先看一张IoC容器的工作框图：<img src="/posts/37871/TIM%E6%88%AA%E5%9B%BE20191018205518.png" alt></p>
+<h2 id="两大阶段"><a href="#两大阶段" class="headerlink" title="两大阶段"></a>两大阶段</h2><p>IoC容器所起的作用就如上图所展示的那样，<strong>他会以某种方式加载Configuration MetaData（通常为XML配置文件），然后根据这些信息绑定整个系统对象，最终组装成一个可用的基于轻量级容器的应用系统。</strong></p>
+<p>Spring的IoC容器实现以上功能的过程，基本上分为两个阶段：<strong>容器启动阶段</strong>和<strong>Bean的实例化阶段</strong>。<br><img src="/posts/37871/TIM%E6%88%AA%E5%9B%BE20191018205833.png" alt></p>
+<h3 id="容器启动阶段"><a href="#容器启动阶段" class="headerlink" title="容器启动阶段"></a>容器启动阶段</h3><p><strong>容器启动伊始，首先会通过某种途径加载Configuration MetaData。除了代码方式比较直接，大部分情况下都会依赖于工具类BeanDefinitionReader对加载的配置文件进行解析和分析，并将分析后的信息编组为相应的BeanDefinition，最后把这些保存了bean定义必要信息的BeanDefinition，注册到相应的BeanDefinitionRegistry，</strong>这样启动阶段就完成了。<br><img src="/posts/37871/TIM%E6%88%AA%E5%9B%BE20191018210226.png" alt></p>
+<h3 id="Bean实例化阶段"><a href="#Bean实例化阶段" class="headerlink" title="Bean实例化阶段"></a>Bean实例化阶段</h3><p><strong>该阶段，容器会首先检查所请求的对象之前是否已经实例化。如果没有，则会根据注册的BeanDefinition所提供的信息实例化被请求对象，并为其注入依赖。如果该对象实现了某些回调接口，也会根据回调接口的要求来装配它。当该对象装配完毕后，容器会立即将其返回请求方使用。</strong></p>
+<h2 id="插手两大阶段"><a href="#插手两大阶段" class="headerlink" title="插手两大阶段"></a>插手两大阶段</h2><p><strong>Spring提供了一种叫做BeanFactoryPostProcessor的容器扩展机制，该机制允许我们在容器实例化相应对象之前，对注册到容器的BeanDefinition所保存的信息做相应的修改。这就相当于在容器第一阶段结束之后，第二阶段开始之前，加入一道工序，让我们对最终的BeanDefinition做一些额外的操作，</strong>比如修改其中bean定义的某些属性，为bean定义增加其他信息等。</p>
+<p>如果自定义实现BeanFactoryPostProcessor，通常实现接口BeanFactoryPostProcessor就可以了，如果有多个自定义实现的类，则实现Order接口来规定它们的顺序。</p>
+<p>但是Spring为我们提供了三种常用的已经实现好的BeanFactoryPostProcessor实现类，它们分别是 PropertyPlaceholderConfigurer、PropertyOverrideConfigurer和CustomEditorConfigure。在介绍这三种实现类之前，先需要了解它们的配置方法是什么，很简单，只需要在XML配置文件中加入以下代码即可：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">... </span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"</span>&gt;</span> </span><br><span class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"locations"</span>&gt;</span>    </span><br><span class="line">			<span class="tag">&lt;<span class="name">list</span>&gt;</span>     </span><br><span class="line">				<span class="tag">&lt;<span class="name">value</span>&gt;</span>conf/jdbc.properties<span class="tag">&lt;/<span class="name">value</span>&gt;</span>     </span><br><span class="line">				<span class="tag">&lt;<span class="name">value</span>&gt;</span>conf/mail.properties<span class="tag">&lt;/<span class="name">value</span>&gt;</span>    </span><br><span class="line">			<span class="tag">&lt;/<span class="name">list</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;/<span class="name">property</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">bean</span>&gt;</span>   </span><br><span class="line">	... </span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="PropertyPlaceholderConfigurer"><a href="#PropertyPlaceholderConfigurer" class="headerlink" title="PropertyPlaceholderConfigurer"></a>PropertyPlaceholderConfigurer</h3><p>通常情况下，对于MySQL数据库或者Redis数据库之类的配置，为了不将这些系统管理信息相关的信息与业务对象相关的信息混杂到XML文件中，会单独把这些信息配置到一个.properties文件中。<strong>PropertyPlaceholderConfigurer允许我们在XML配置文件中使用占位符，并将这些占位符所代表的资源单独配置到见简单的properties文件中来加载，</strong>例如最常见的：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"dataSource"</span> <span class="attr">class</span>=<span class="string">"org.apache.commons.dbcp.BasicDataSource"</span> <span class="attr">destroy-method</span>=<span class="string">"close"</span>&gt;</span> </span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"url"</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>$&#123;jdbc.url&#125;<span class="tag">&lt;/<span class="name">value</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"driverClassName"</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>$&#123;jdbc.driver&#125;<span class="tag">&lt;/<span class="name">value</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"username"</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>$&#123;jdbc.username&#125;<span class="tag">&lt;/<span class="name">value</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"password"</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>$&#123;jdbc.password&#125;<span class="tag">&lt;/<span class="name">value</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"maxActive"</span>&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>100<span class="tag">&lt;/<span class="name">value</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span> </span><br><span class="line">	...</span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>对应的properties文件内容则为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">jdbc.url=jdbc:mysql://server/MAIN?useUnicode=true&amp;characterEncoding=ms932&amp;failOverReadOnly=false&amp;roundRobinLoadBalance=true </span><br><span class="line">jdbc.driver=com.mysql.jdbc.Driver </span><br><span class="line">jdbc.username=your username</span><br><span class="line">jdbc.password=your password</span><br></pre></td></tr></table></figure>
+
+<p><strong>基本就如上面所说的那样，当BeanFactory完成第一阶段加载完成所有配置信息之后，BeanFactory中保存的对象的属性信息还只是以占位符的形式存在，如”${jdbc.url}”。当PropertyPlaceholderConfigurer被应用时，他会使用properties配置文件中的配置信息来替换相应的BeanDefintion中占位符所表示的属性值。</strong>PropertyPlaceholderConfigurer不单会从其配置的properties文件中加载配置项，同时还会检查Java的System类中的Properties。</p>
+<h3 id="PropertyOverrideConfigurer"><a href="#PropertyOverrideConfigurer" class="headerlink" title="PropertyOverrideConfigurer"></a>PropertyOverrideConfigurer</h3><p><strong>PropertyOverrideConfigurer的作用就是，通过它可以对容器中篇日志的任何你想处理的bean定义的property信息进行覆盖替换。</strong>比如之前的dataSource定义中，maxActive的值为100，如果我们觉得不合适，那么可以通过PropertyOverrideConfigurer将其覆盖为200：<code>dataSource.maxActive=200</code>。</p>
+<p>如果要对容器中的某些bean定义的property信息进行覆盖，我们需要按照如下规则提供一个PropertyOverrideConfigurer使用的配置文件：<code>beanName.propertyName=value</code>。然后通过以下方法将PropertyOverrideConfigurer注册到容器即可：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"org.springframework.beans.factory.config.PropertyOverrideConfigurer"</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"location"</span> <span class="attr">value</span>=<span class="string">"pool-adjustment.properties"</span>/&gt;</span> </span><br><span class="line"><span class="tag">&lt; /<span class="attr">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>当容器中配置的多个PropertyOverrideConfigurer对同一个bean定义的同一个property值进行处理的时候，最后一个会生效。</strong></p>
+<h3 id="CustomEditorConfigure"><a href="#CustomEditorConfigure" class="headerlink" title="CustomEditorConfigure"></a>CustomEditorConfigure</h3><p><strong>因为我们配置XML文件都是String类型，即容器从XML格式的文件中读取的都是字符串形式，最终应用程序却是由各种类型的对象所构成的。要想完成这种由字符串到具体对象的转换，都需要这种转换规则相关的信息，而CustomEditorConfigure就是帮我们传达类似信息的。</strong></p>
+<h2 id="bean的生命周期"><a href="#bean的生命周期" class="headerlink" title="bean的生命周期"></a>bean的生命周期</h2><p>接下来就是第二大阶段了，即bean实例化阶段的实现逻辑。这里还需要再提一次BeanFactory和ApplicationContext对于bean加载的区别：</p>
+<ul>
+<li><strong>BeanFactory对象实例化默认采用延迟初始化</strong>。</li>
+<li><strong>ApplicationContext启动之后会实例化所有的bean定义</strong>。</li>
+</ul>
+<p>当调用getBean()方法时，内部发现该bean定义之前还没有被实例化之后，会通过createBean()方法来进行具体的对象实例化，实例化过程如图所示：<img src="/posts/37871/TIM%E6%88%AA%E5%9B%BE20191018215127.png" alt>下面就来详细看看其中的步骤。</p>
+<h3 id="Bean的实例化与BeanWrapper"><a href="#Bean的实例化与BeanWrapper" class="headerlink" title="Bean的实例化与BeanWrapper"></a>Bean的实例化与BeanWrapper</h3><p>容器在内部实现的时候，采用“策略模式”来决定采用何种方式初始化bean实例。通常，可以通过反射或者CGLIB动态字节码生成来初始化相应的bean实例或者动态生成其子类。</p>
+<h4 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h4><p><strong>容器只要根据相应的bean定义的BeanDefintion取得实例化信息，结合CglibSubclassingInstantiationStrategy通过反射的方式，以及不同的bean定义类型，就可以返回实例化完成的对象实例。但是，返回的不是构造完成的对象实例，而是以BeanWrapper对构造完成的对象实例进行包括，返回相应的BeanWrapper实例。</strong></p>
+<h4 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h4><p><strong>第一步结束后返回BeanWrapper实例而不是原先的对象实例，就是为了第二步“设置对象属性”。</strong>使用BeanWrapper对bean实例操作很方便，可以免去直接使用Java反射API操作对象实力的反锁，看一段代码就知道Spring容器内部时如何设置对象属性的了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Object provider = Class.forName(<span class="string">"package.name.FXNewsProvider"</span>).newInstance(); </span><br><span class="line">Object listener = Class.forName(<span class="string">"package.name.DowJonesNewsListener"</span>).newInstance(); </span><br><span class="line">Object persister = Class.forName(<span class="string">"package.name.DowJonesNewsPersister"</span>).newInstance();  </span><br><span class="line"></span><br><span class="line">BeanWrapper newsProvider = <span class="keyword">new</span> BeanWrapperImpl(provider); </span><br><span class="line">newsProvider.setPropertyValue(<span class="string">"newsListener"</span>, listener); </span><br><span class="line">newsProvider.setPropertyValue(<span class="string">"newPersistener"</span>, persister);</span><br></pre></td></tr></table></figure>
+
+<h3 id="各色的Aware接口"><a href="#各色的Aware接口" class="headerlink" title="各色的Aware接口"></a>各色的Aware接口</h3><p><strong>当对象实例化完成后并且相关属性以及依赖设置完成之后，Spring容器会检查当前对象实例是否实现了一系列的以Aware命名结尾的接口定义，如果是，则将这些Aware接口定义中规定的依赖注入给当前对象实例。</strong>下面介绍几个重要的Aware接口：</p>
+<ul>
+<li><strong>ApplicationContextAware</strong>: 获得ApplicationContext对象,可以用来获取所有Bean definition的名字。</li>
+<li><strong>BeanFactoryAware</strong>:获得BeanFactory对象，可以用来检测Bean的作用域。</li>
+<li><strong>BeanNameAware</strong>:获得Bean在配置文件中定义的名字。</li>
+<li><strong>ResourceLoaderAware</strong>:获得ResourceLoader对象，可以获得classpath中某个文件。</li>
+<li><strong>ServletContextAware</strong>:在一个MVC应用中可以获取ServletContext对象，可以读取context中的参数。</li>
+<li><strong>ServletConfigAware</strong>： 在一个MVC应用中可以获取ServletConfig对象，可以读取config中的参数。</li>
+</ul>
+<h3 id="BeanPostProcessor"><a href="#BeanPostProcessor" class="headerlink" title="BeanPostProcessor"></a>BeanPostProcessor</h3><p>BeanPostProcessor会处理容器内所有符合条件的实例化后的对象实例，该接口声明了两个方法，分别在不同的时机执行：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BeanPostProcessor</span>  </span>&#123;  </span><br><span class="line">	<span class="function">Object <span class="title">postProcessBeforeInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException</span>; </span><br><span class="line">	<span class="function">Object <span class="title">postProcessAfterInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>postProcessBeforeInitialization()方法是上图中BeanPostProcessor前置处理这一步将会执行的方法，postProcessAfterInitialization()则是对应图中BeanPostProcessor后置处理那一步将会执行的方法。</strong>BeanPostProcessor的两个方法中都传入了原来的对象实例的引用，这位我们操作扩展容器的对象实例化过程中的行为提供了极大的便利。</p>
+<h3 id="InitializingBean和init-method"><a href="#InitializingBean和init-method" class="headerlink" title="InitializingBean和init-method"></a>InitializingBean和init-method</h3><p>InitializingBean是容器内部广泛使用的一个对象生命周期表示接口，其定义如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">InitializingBean</span> </span>&#123;   </span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">afterPropertiesSet</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>其作用在于，在对象实例化过程调用过“BeanPostProcessor”的前置处理之后，会接着检测当前对象是否实现了InitializingBean接口，如果是，则回到调用其afterPropertiesSet()方法进一步调整对象实例的状态。</strong></p>
+<p><strong>通过init-method，系统中业务对象的自定义初始化操作可以以任何方式命名。而不再受制于InitializingBean的afterPropertiesSet()。</strong>在自己定义init方法后，只需要在XML文件中简单配置一下就好了：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">beans</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"tradeDateCalculator"</span> <span class="attr">class</span>=<span class="string">"FXTradeDateCalculator"</span> <span class="attr">init-method</span>=<span class="string">"setupHolidays"</span> &gt;</span> </span><br><span class="line">		<span class="tag">&lt;<span class="name">constructor-arg</span>&gt;</span>    </span><br><span class="line">			<span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"sqlMapClientTemplate"</span>/&gt;</span>   </span><br><span class="line">		<span class="tag">&lt;/<span class="name">constructor-arg</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">bean</span>&gt;</span> </span><br><span class="line">	<span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"sqlMapClientTemplate"</span> <span class="attr">class</span>=<span class="string">"org.springframework.orm.ibatis.SqlMapClientTemplate"</span>&gt;</span>   </span><br><span class="line">		...  </span><br><span class="line">	<span class="tag">&lt;/<span class="name">bean</span>&gt;</span>    </span><br><span class="line">	... </span><br><span class="line"><span class="tag">&lt; /<span class="attr">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这样FXTradeDateCalculator类中的setupHolidays方法就是会在该阶段执行的方法了。</p>
+<h3 id="DisposableBean与destroy-method"><a href="#DisposableBean与destroy-method" class="headerlink" title="DisposableBean与destroy-method"></a>DisposableBean与destroy-method</h3><p><strong>当所有的一切，该设置的设置，该注入的注入，该调用的调用之后，容器将检查singleton类型的bean实例，看其是否实现了DisposableBean接口。或者其对应的bean定义是否通过&lt;bean&gt;的destroy-method属性制定了自定义的对象销毁方法，如果是，就会为该实例注册一个用于对象销毁的回调，以及在这些singleton类型的对象实例销毁之前，执行销毁逻辑。</strong></p>
+<p><strong>不过这些自定义的对象销毁逻辑，在对象实例初始化完成并注册了相关的回调方法之后，并不会马上执行。回调方法注册后，在使用完成后，只有在执行回调方法之后，才会执行销毁操作。</strong></p>
+<p>对于BeanFactory注册回调方法的方式为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">((ConfigurableListableBeanFactory)container).destroySingletons();</span><br></pre></td></tr></table></figure>
+
+<p>对于ApplicationContext注册回调方法的方式为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">((AbstractApplicationContext)container).registerShutdownHook();</span><br></pre></td></tr></table></figure>
+
+<p>至此为止，bean就算走完了它在容器中“光荣”的一生。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/10510/" rel="next" title="IoC容器和IoC Service Provider">
+                <i class="fa fa-chevron-left"></i> IoC容器和IoC Service Provider
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Potato">
+            
+              <p class="site-author-name" itemprop="name">Potato</p>
+              <div class="site-description motion-element" itemprop="description">Although the road is endless and faraway, I still want to pursue the truth in the world.</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Potato-xupt" title="GitHub &rarr; https://github.com/Potato-xupt" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:401242993@qq.com" title="E-Mail &rarr; mailto:401242993@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#拥有BeanFactory之后的生活"><span class="nav-number">1.</span> <span class="nav-text">拥有BeanFactory之后的生活</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#BeanFactory的对象注册与依赖绑定方式"><span class="nav-number">2.</span> <span class="nav-text">BeanFactory的对象注册与依赖绑定方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#直接编码方式"><span class="nav-number">2.1.</span> <span class="nav-text">直接编码方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#外部配置文件方式"><span class="nav-number">2.2.</span> <span class="nav-text">外部配置文件方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Properties配置格式的加载"><span class="nav-number">2.2.1.</span> <span class="nav-text">Properties配置格式的加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XML配置格式的加载"><span class="nav-number">2.2.2.</span> <span class="nav-text">XML配置格式的加载</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注解方式"><span class="nav-number">2.3.</span> <span class="nav-text">注解方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#XML配置方法"><span class="nav-number">3.</span> <span class="nav-text">XML配置方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#lt-beans-gt-和-lt-bean-gt"><span class="nav-number">3.1.</span> <span class="nav-text">&lt;beans&gt;和&lt;bean&gt;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lt-beans-gt-之唯我独尊"><span class="nav-number">3.1.1.</span> <span class="nav-text">&lt;beans&gt;之唯我独尊</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt-description-gt-、-lt-import-gt-和-lt-alias-gt"><span class="nav-number">3.1.2.</span> <span class="nav-text">&lt;description&gt;、&lt;import&gt;和&lt;alias&gt;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#孤孤单单的id和class"><span class="nav-number">3.2.</span> <span class="nav-text">孤孤单单的id和class</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#id属性"><span class="nav-number">3.2.1.</span> <span class="nav-text">id属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#class属性"><span class="nav-number">3.2.2.</span> <span class="nav-text">class属性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XML中的继承"><span class="nav-number">3.3.</span> <span class="nav-text">XML中的继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bean的scope（作用域）"><span class="nav-number">3.4.</span> <span class="nav-text">bean的scope（作用域）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#singleton"><span class="nav-number">3.4.1.</span> <span class="nav-text">singleton</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#prototype"><span class="nav-number">3.4.2.</span> <span class="nav-text">prototype</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#request"><span class="nav-number">3.4.3.</span> <span class="nav-text">request</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#session"><span class="nav-number">3.4.4.</span> <span class="nav-text">session</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#global-session"><span class="nav-number">3.4.5.</span> <span class="nav-text">global session</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义scope"><span class="nav-number">3.4.6.</span> <span class="nav-text">自定义scope</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工厂方法与FactoryBean"><span class="nav-number">3.5.</span> <span class="nav-text">工厂方法与FactoryBean</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#静态工厂方法"><span class="nav-number">3.5.1.</span> <span class="nav-text">静态工厂方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非静态工厂方法"><span class="nav-number">3.5.2.</span> <span class="nav-text">非静态工厂方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FactoryBean"><span class="nav-number">3.5.3.</span> <span class="nav-text">FactoryBean</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法注入以及方法替换"><span class="nav-number">3.6.</span> <span class="nav-text">方法注入以及方法替换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法注入"><span class="nav-number">3.6.1.</span> <span class="nav-text">方法注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#殊途同归"><span class="nav-number">3.6.2.</span> <span class="nav-text">殊途同归</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法替换"><span class="nav-number">3.6.3.</span> <span class="nav-text">方法替换</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#容器加载过程"><span class="nav-number">4.</span> <span class="nav-text">容器加载过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#两大阶段"><span class="nav-number">4.1.</span> <span class="nav-text">两大阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#容器启动阶段"><span class="nav-number">4.1.1.</span> <span class="nav-text">容器启动阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bean实例化阶段"><span class="nav-number">4.1.2.</span> <span class="nav-text">Bean实例化阶段</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插手两大阶段"><span class="nav-number">4.2.</span> <span class="nav-text">插手两大阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PropertyPlaceholderConfigurer"><span class="nav-number">4.2.1.</span> <span class="nav-text">PropertyPlaceholderConfigurer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PropertyOverrideConfigurer"><span class="nav-number">4.2.2.</span> <span class="nav-text">PropertyOverrideConfigurer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CustomEditorConfigure"><span class="nav-number">4.2.3.</span> <span class="nav-text">CustomEditorConfigure</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bean的生命周期"><span class="nav-number">4.3.</span> <span class="nav-text">bean的生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Bean的实例化与BeanWrapper"><span class="nav-number">4.3.1.</span> <span class="nav-text">Bean的实例化与BeanWrapper</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步"><span class="nav-number">4.3.1.1.</span> <span class="nav-text">第一步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步"><span class="nav-number">4.3.1.2.</span> <span class="nav-text">第二步</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#各色的Aware接口"><span class="nav-number">4.3.2.</span> <span class="nav-text">各色的Aware接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BeanPostProcessor"><span class="nav-number">4.3.3.</span> <span class="nav-text">BeanPostProcessor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#InitializingBean和init-method"><span class="nav-number">4.3.4.</span> <span class="nav-text">InitializingBean和init-method</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DisposableBean与destroy-method"><span class="nav-number">4.3.5.</span> <span class="nav-text">DisposableBean与destroy-method</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+    <div id="sidebar-dimmer"></div>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Potato</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+<div>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_pv" style="display:none">
+    本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    <span class="post-meta-divider">|</span>
+</span>
+<span id="busuanzi_container_site_uv" style="display:none">
+    有<span id="busuanzi_value_site_uv"></span>人看过我的博客啦
+</span>
+</div>
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.2.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.2.0"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+
+  
+  <script src="/js/js.cookie.js?v=7.2.0"></script>
+  <script src="/js/scroll-cookie.js?v=7.2.0"></script>
+
+
+  
+
+  
+
+  
+
+
+  
+    
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '9b0c87d3c176c7c8ae2f',
+    clientSecret: 'c1a521ad426a42ab0a65b5d65a33e27303274435',
+    repo: 'comments',
+    owner: 'Potato-xupt',
+    admin: ['Potato-xupt'],
+    id: md5(location.pathname),
+    
+      language: window.navigator.language || window.navigator.userLanguage,
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
