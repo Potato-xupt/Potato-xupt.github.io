@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-10-18T14:36:48.377Z</updated>
+  <updated>2019-10-19T06:14:40.229Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,26 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>IoC容器之ApplicationContext</title>
+    <link href="http://yoursite.com/posts/30205/"/>
+    <id>http://yoursite.com/posts/30205/</id>
+    <published>2019-10-19T05:33:24.000Z</published>
+    <updated>2019-10-19T06:14:40.229Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="统一资源加载策略"><a href="#统一资源加载策略" class="headerlink" title="统一资源加载策略"></a>统一资源加载策略</h1><p>ApplicationContext既然要加载配置文件，就需要一个工具可以用来加载这些资源，因此而出现了ResourceLoader。ApplicationContext实则间接继承了ResourceLoader接口，可以用来对Spring内的资源做一个统一的加载。</p><p>在使用中最常用的两个加载器就是<strong>ClassPathXmlApplicationContext</strong>和<strong>FileSystemXmlApplicationContext</strong>。简单的使用代码如下：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ResourceLoader resourceLoader = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"配置文件路径"</span>); </span><br><span class="line"><span class="comment">// 或者 </span></span><br><span class="line"><span class="comment">// ResourceLoader resourceLoader = new FileSystemXmlApplicationContext("配置文件路径"); </span></span><br><span class="line">Resource fileResource = resourceLoader.getResource(<span class="string">"D:/spring21site/README"</span>);</span><br></pre></td></tr></table></figure><p><strong>ResourceLoader中增加了一种新的资源路径协议：classpath：和classpath<em>：，classpath</em>：与classpath：的唯一区别在于，如果能够在classpath中找到多个指定的资源，则返回多个。</strong></p><p><strong>ClassPathXmlApplicationContext和FileSystemXmlApplicationContext在处理资源在记得默认行为上有所不用。当ClassPathXmlApplicationContext在实例化的时候，即使没有执行classpath：或者classpath*：等前缀，它会默认从classpath中加载bean定义配置文件。而FileSystemXmlApplicationContext会默认从文件系统中加载bean定义文件。</strong></p><h1 id="其他特性"><a href="#其他特性" class="headerlink" title="其他特性"></a>其他特性</h1><p>ApplicationContext还提供了一些其他特性，这里就简单介绍一下，不过多描述。</p><ul><li><strong>国际化信息支持</strong>：ApplicationContext有两种国际化支持的方式，一个是Locale结合ResourceBundle，它可以绑定地区。另外一个就是MessageSource可以统一国际化信息的访问方式。</li><li><strong>容器内部事件发布</strong>：JavaSE提供了实现自定义时间发布功能的基础类，即EventListener和EventObject。</li><li><strong>多配置模块加载的简化</strong>：在配置应用的时候，为了更好的划分逻辑层次和分工，而延伸到个让容器同时读入划分到不同配置文件的信息。</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      ApplicationContext作为较BeanFacory更先进的IoC容器实现，除了拥有BeanFactory支持的所有功能之外，还进一步扩展了基本容器的功能。下面就简单介绍一下这些新的特性吧。
+    
+    </summary>
+    
+      <category term="Spring" scheme="http://yoursite.com/categories/Spring/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>IoC容器之BeanFactory</title>
