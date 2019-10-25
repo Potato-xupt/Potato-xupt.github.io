@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.2.0',
+    sidebar: {"position":"left","width":250,"display":"post","offset":12,"onmobile":true,"dimmer":true},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="IP（Internet Protocol，网际协议），IP作为整个TCP/IP中至关重要的协议，主要负责将数据包发送给最终的目标计算机，因此，IP能够让世界上任何两台计算机之间进行通信。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IP协议">
+<meta property="og:url" content="http://yoursite.com/posts/18937/index.html">
+<meta property="og:site_name" content="Potato Blog">
+<meta property="og:description" content="IP（Internet Protocol，网际协议），IP作为整个TCP/IP中至关重要的协议，主要负责将数据包发送给最终的目标计算机，因此，IP能够让世界上任何两台计算机之间进行通信。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/posts/18937/TIM%E6%88%AA%E5%9B%BE20191025200434.png">
+<meta property="og:image" content="http://yoursite.com/posts/18937/TIM%E6%88%AA%E5%9B%BE20191025204003.png">
+<meta property="og:image" content="http://yoursite.com/posts/18937/TIM%E6%88%AA%E5%9B%BE20191025212713.png">
+<meta property="og:image" content="http://yoursite.com/posts/18937/TIM%E6%88%AA%E5%9B%BE20191025214216.png">
+<meta property="og:image" content="http://yoursite.com/posts/18937/TIM%E6%88%AA%E5%9B%BE20191025214237.png">
+<meta property="og:image" content="http://yoursite.com/posts/18937/TIM%E6%88%AA%E5%9B%BE20191025215451.png">
+<meta property="og:image" content="http://yoursite.com/posts/18937/TIM%E6%88%AA%E5%9B%BE20191025215837.png">
+<meta property="og:image" content="http://yoursite.com/posts/18937/TIM%E6%88%AA%E5%9B%BE20191025220758.png">
+<meta property="og:image" content="http://yoursite.com/posts/18937/TIM%E6%88%AA%E5%9B%BE20191025221749.png">
+<meta property="og:updated_time" content="2019-10-25T14:23:00.182Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="IP协议">
+<meta name="twitter:description" content="IP（Internet Protocol，网际协议），IP作为整个TCP/IP中至关重要的协议，主要负责将数据包发送给最终的目标计算机，因此，IP能够让世界上任何两台计算机之间进行通信。">
+<meta name="twitter:image" content="http://yoursite.com/posts/18937/TIM%E6%88%AA%E5%9B%BE20191025200434.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Potato Blog" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/posts/18937/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>IP协议 | Potato Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Potato Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">李土豆的Blog</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类<span class="badge">5</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于我</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+    
+  
+  
+
+  
+
+  <article class="post post-type-normal true" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/18937/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Potato">
+      <meta itemprop="description" content="Although the road is endless and faraway, I still want to pursue the truth in the world.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Potato Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">IP协议
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-24 21:54:27" itemprop="dateCreated datePublished" datetime="2019-10-24T21:54:27+08:00">2019-10-24</time>
+            </span>
+          
+
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-10-25 22:23:00" itemprop="dateModified" datetime="2019-10-25T22:23:00+08:00">2019-10-25</time>
+              </span>
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/计算机网络/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+		  
+		  
+
+          <br>
+          
+
+          
+
+          
+            <div class="post-description">IP（Internet Protocol，网际协议），IP作为整个TCP/IP中至关重要的协议，主要负责将数据包发送给最终的目标计算机，因此，IP能够让世界上任何两台计算机之间进行通信。</div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="IP相当于OSI参考模型的第3层"><a href="#IP相当于OSI参考模型的第3层" class="headerlink" title="IP相当于OSI参考模型的第3层"></a>IP相当于OSI参考模型的第3层</h1><p>IP相当于OSI参考模型中的第3层——网络层。</p>
+<p><strong>网络层的主要作用是“实现终端节点之间的通信”。这种终端节点之间的通信也叫“点对点”通信。</strong></p>
+<p>从前面的章节可知，网络层的下一层是数据链路层，数据链路层的主要作用是再互联同一种数据链路的节点之间进行包传递。而一但快遇多种数据链路，就需要借助网络层。网络层可以跨越不同的数据链路，即使是在不同的数据链路上也能实现两端节点之间的数据包传输。</p>
+<h1 id="IP基础知识"><a href="#IP基础知识" class="headerlink" title="IP基础知识"></a>IP基础知识</h1><p>在计算机通信中，为了识别通信对端，必须要有一个类似于地址的识别码进行标识，<strong>MAC地址正是用来标识同一数据链路中不同计算机的一种识别码；而IP地址用于在“连接到网络中的所有主机中识别出进行通信的目标地址”，因此在TCP/IP通信中所有注解或路由器必须设定自己的IP地址。</strong></p>
+<h2 id="路由控制"><a href="#路由控制" class="headerlink" title="路由控制"></a>路由控制</h2><p>路由控制（Routing）是指将分组数据发送到最终目标地址的功能，即使网络非常复杂，也可以通过路由控制确定到达目标地址的通路。一旦这个路由控制的运行出现异常，分组数据极有可能迷失，无法到达目标地址。因此，一个数据包之所以能成功地到达最终的目标地址，全靠路由控制。</p>
+<p>当某个IP包到达路由器时，路由器首先查找目标地址，从而再决定下一步应该将这个包发往哪个路由器，然后将包发送过去。当这个IP包到达那个路由器以后，会再次经历查找下一目标地址的过程，并由该路由器转发给下一个被找到的路由器。这个过程可能会反复多次，知道找到最终的目标地址，将数据包发送给这个节点。</p>
+<p><strong>为了将数据包发给目标主机，所有主机都维护着一张路由控制表。该表记录IP数据在下一步应该发给哪个路由器。IP包根据这个路由表在各个数据链路上传输。</strong><img src="/posts/18937/TIM%E6%88%AA%E5%9B%BE20191025200434.png" alt></p>
+<h2 id="数据链路的抽象化"><a href="#数据链路的抽象化" class="headerlink" title="数据链路的抽象化"></a>数据链路的抽象化</h2><p>IP是实现多个数据链之间通信的协议。数据链路根据种类的不同各有特点，<strong>不同数据链路有个最大的区别：就是它们各自的最大传输单位（MTU）不同。</strong>MTU的值再以太网是1500字节，再FDDI中是4352字节，而ATM则为9180字节。IP的上一层可能会要求传送比这些MTU更多字节数据，因此必须在线路上传送比包长还要小的MTU。</p>
+<p>为了解决这个问题，IP进行分片处理。顾名思义，所谓分片处理是指，将较大的IP包分成多个较小的IP包。分片的包到了对端目标地址以后会再被组合起来传给上一层。</p>
+<h2 id="IP属于面向无连接型"><a href="#IP属于面向无连接型" class="headerlink" title="IP属于面向无连接型"></a>IP属于面向无连接型</h2><p><strong>IP面向无连接，即在发包之前，不需要建立与对端目标地址之间的连接，上层如果遇到需要发送给IP的数据，该数据会立即被压缩成IP包发送出去。</strong></p>
+<p>IP采用面向无连接的主要原因有两点：</p>
+<ul>
+<li><strong>一是为了简化。</strong>面向连接比起面向无连接处理相对复杂。甚至管理每个连接本身就是一个相当繁琐的事情。</li>
+<li><strong>二是为了提速。</strong>每次通信之前都要事先建立连接，又会降低处理速度。</li>
+</ul>
+<p>需要连接时，可以委托上一层提供此项服务。因此IP为了实现简单化与高速化采用面向无连接的方式。</p>
+<p>IP提供尽力服务，意指“为了把数据包发送到最终目标地址，尽最大努力”。然而，它并不做“最终收到与否的验证”。IP数据包在途中可能会发生丢包、错位以及数据量翻倍等问题。</p>
+<h1 id="IP地址基础知识"><a href="#IP地址基础知识" class="headerlink" title="IP地址基础知识"></a>IP地址基础知识</h1><h2 id="IP地址的定义"><a href="#IP地址的定义" class="headerlink" title="IP地址的定义"></a>IP地址的定义</h2><p>IP（IPv4）地址由32为正整数来表示。TCp/IP通信要求将这样的IP地址分配给每一个参与通信的主机。<strong>采用将32位的IP地址以每8位为一组，分成4组，每组以“.”隔开，再将每组数转换为十进制数。</strong></p>
+<p>IP地址并非是根据主机台数来配置的，而是每一台主机上的每一块网卡都得设置IP地址。通常一块网卡只设置一个IP地址，但其实一块网卡也可以设置多个IP地址。此外，一台路由器通常都会配置两个以上的网卡，因此可以设置两个以上的IP地址。</p>
+<h2 id="IP地址的组成"><a href="#IP地址的组成" class="headerlink" title="IP地址的组成"></a>IP地址的组成</h2><p><strong>IP地址由“网络标识（网络地址）”和“主机标识（主机地址）”两部分组成。</strong></p>
+<p>网络标识必须保证相互连接的每个段的地址不相重复。而相同段内相连的主机必须有相同的网络地址。IP地址的“主机标识”则不允许在同一个网段内重复出现。由此，<strong>可以通过设置网络地址和主机地址，在相互连接的整个网络中保证每台主机的IP地址都不会相互重复。即IP地址具有了唯一性。</strong></p>
+<p>最初二者以分类进行区别，而现在基本以子网掩码（网络前缀）区分。</p>
+<h2 id="IP地址的分类"><a href="#IP地址的分类" class="headerlink" title="IP地址的分类"></a>IP地址的分类</h2><p>IP地址分为四个级别，分别为A类、B类、C类、D类。它根据IP地址中从第1位到第4位的比特列对其网络标识和主机标识进行区分。</p>
+<ul>
+<li><strong>A类地址</strong>：A类IP地址是首位以“0”开头的地址。从第1位到第8位是他的网络标识。用十进制表示的话，0.0.0.0~127.0.0.0是A类的网络地址。A类地址的后24位相当于主机标识。</li>
+<li><strong>B类地址</strong>：B类IP地址是前两位为“10”的地址。从第1位到第16位是它的网络标识。用十进制表示的话，128.0.0.0~191.255.0.0是B类的网络地址。B类地址的后16位相当于主机标识。</li>
+<li><strong>C类地址</strong>：C类IP地址是前三位为“110”的地址。从第1位到第24位是它的网络标识。用十进制表示的话，192.0.0.0~223.255.255.0是C类的网络地址。C类地址的后8位相当于主机标识。</li>
+<li><strong>D类地址</strong>：D类IP地址是前四位为“1110”的地址，从第1为到第32位是它的网络标识。用十进制表示的话，224.0.0.0~239.255.255.255.255是D类的网络地址。D类网络地址没有主机标识，常被用于多播。<br><img src="/posts/18937/TIM%E6%88%AA%E5%9B%BE20191025204003.png" alt><br>在IP地址分配时有一点需要注意，<strong>不可以全部为0或全部为1。</strong>因为全部为0在表示对应的网络地址或IP地址不可获知的情况下才使用。而全部为1的主机地址通常作为广播地址。</li>
+</ul>
+<h2 id="广播地址"><a href="#广播地址" class="headerlink" title="广播地址"></a>广播地址</h2><p><strong>广播地址用于在一个链路中相互连接的主机之间发送数据包。将IP地址中的主机地址部分全部设置为1，就成为了广播地址。</strong></p>
+<p>广播地址分为<strong>本地广播</strong>和<strong>直接广播</strong>两种。<strong>在本网络内的广播叫做本地广播，在不同网络之间的广播叫做直接广播。</strong></p>
+<h2 id="子网掩码"><a href="#子网掩码" class="headerlink" title="子网掩码"></a>子网掩码</h2><p>起初一个IP地址只要确定了其分类，也就确定了它的网络标识和主机标识，网络标识相同的计算机必须同属于同一个链路。但是这样会造成很多的IP地址浪费，因此后来人们改进使用子网掩码进行区分。</p>
+<p>对于子网掩码，目前有两种标识方式。以172.20.100.52的前26位是网络地址的情况为例，以下是其中一种表示方法，它将IP地址与子网掩码的地址分别用两行来表示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">IP地址		172.	20.	100.	52</span><br><span class="line">子网掩码		255.	255.	255.	192</span><br><span class="line"></span><br><span class="line">网络地址		172.	20.	100.	0</span><br><span class="line">子网掩码		255.	255.	255.	192</span><br><span class="line"></span><br><span class="line">广播地址		172.	20.	100.	63</span><br><span class="line">子网掩码		255.	255.	255.	192</span><br></pre></td></tr></table></figure>
+
+<p>另一种表示方法如下所示，它在每个IP地址后面追加网络地址的位数用“/”隔开。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">IP地址		172.	20.	100.	52	/26</span><br><span class="line">网络地址		172.	20.	100.	0	/26</span><br><span class="line">广播地址		172.	20.	100.	63	/26</span><br></pre></td></tr></table></figure>
+
+<h1 id="路由控制-1"><a href="#路由控制-1" class="headerlink" title="路由控制"></a>路由控制</h1><p>发送数据包时所使用的地址是网络地址，即IP地址。然而仅仅有IP地址还不足以将数据包发送到对端目标地址，在数据发送过程中还需要类似于“知名路由器或主机”的信息，以便真正的发往目标地址。保存这种信息的就是路由控制表。</p>
+<p><strong>该路由控制表的形成方式有两种：一种是管理员手动设置，另一种是路由器与其他路由器相互交换形信息时自动刷新。前者也叫静态路由控制，后者叫做动态路由控制。</strong></p>
+<h2 id="IP地址与路由控制"><a href="#IP地址与路由控制" class="headerlink" title="IP地址与路由控制"></a>IP地址与路由控制</h2><p>路由控制表中记录着网络地址与下一步应该发送至路由器的地址，在发送IP包时，首先要确定IP包首部中的目标地址，再从路由控制表中找到与该地址具有相同网络地址的记录，根据该记录将IP包转发给相应的下一个路由器。<strong>如果控制表中存在多条相同网络地址的记录，就选择一个最为吻合的网络地址，所谓最为吻合是指相同位数最多的意思。</strong></p>
+<p>如果一张路由表中包含所有的网络及其子网的信息，将会造成无端的浪费，这是，默认路由是不错的选择。默认路由是指路由表中任何一个地址都能与之匹配的记录。默认路由一般标记为0.0.0.0./0或default。</p>
+<p>“IP地址/32”也被称为主机路由。它的意思是整个IP地址的所有位都将参与路由。进行主机路由，意味着基于主机上网卡配置的IP地址本身，而不是基于该地址的网络地址部分进行路由。主机路由多被用于不希望通过网络地址路由的情况。</p>
+<h1 id="IP分割处理与再构成处理"><a href="#IP分割处理与再构成处理" class="headerlink" title="IP分割处理与再构成处理"></a>IP分割处理与再构成处理</h1><p>如前面介绍所说，每种数据链路的最大传输单元（MTU）不尽相同，简与IP数据数据链路上一层，它必须不受限于不同数据链路的MTU大小。</p>
+<h2 id="IP报文的分片与重组"><a href="#IP报文的分片与重组" class="headerlink" title="IP报文的分片与重组"></a>IP报文的分片与重组</h2><p>任何一台主机都有必要对IP分片进行相应的处理。分片往往在网络上遇到比较大的报文无法一下子发送出去时才会进行处理。</p>
+<p><strong>分片默认以8个字节的倍数为单位进行，经过分片之后的IP数据报在被重组的时候，只能由目标主机进行。路由器虽然做分片但是不会进行重组。</strong><br><img src="/posts/18937/TIM%E6%88%AA%E5%9B%BE20191025212713.png" alt></p>
+<h2 id="路径MTU发现"><a href="#路径MTU发现" class="headerlink" title="路径MTU发现"></a>路径MTU发现</h2><p>分片机制也有它的不足，例如路由器的处理符合加重，一旦某个分片丢失，会造成整个IP数据报作废等等。为了应对这些问题，产生了一种新的技术“路径MTU发现”。</p>
+<p><strong>所谓路径MTU是指从发送端主机到接收端主机之间不需要分片时最大的MTU的大小。即路径中存在的所有数据链路中最小的MTU。而路径MTU发现从发送主机按照路径MTU的大小将数据报分片后进行发送，进行路径MTU发现，就可以避免在中途的路由器上进行分片处理，也可以在TCP中发送更大的包。</strong></p>
+<p>路径MTU发现的工作原理如下：<br>首先在发送端主机发送IP数据报时将其首部的分片禁止标志设置为1。根据这个标志位，途中的路由器即使遇到需要分片才能处理的大包，也不会去分片，而是将包丢弃。随后，通过一个ICMP的不可达消息将数据链路上MTU的值给发送主机。</p>
+<p>下一次，从发送给同一目标主机的IP数据报获得ICMP所通知的MTU值以后，将它设置为当前MTU。发送主机根据这个MTU对数据报进行分片处理。如此反复，直到数据报被发送到目标主机为止没有再收到任何ICMP，就认为最后一次ICMP所统治的MTU即是一个合适的MTU值。</p>
+<p>那么，当MTU的值比较多时，最少可以缓存约10分钟。在这10分钟内使用刚刚求得的MTU，但过了这10分钟以后则重新根据链路上的MTU做一次路径MTU发现。</p>
+<p>下面是UDP和TCP的路径MTU发现过程：<img src="/posts/18937/TIM%E6%88%AA%E5%9B%BE20191025214216.png" alt><img src="/posts/18937/TIM%E6%88%AA%E5%9B%BE20191025214237.png" alt></p>
+<h1 id="IPv6"><a href="#IPv6" class="headerlink" title="IPv6"></a>IPv6</h1><p>IPv6是为了根本解决IPv4地址耗尽的问题而被标准化的网络协议。IPv4的地址长度为4个8位字节，即32比特。而IPv6的地址长度则是原来的4倍，即128比特，一般写成8个16字位字节。</p>
+<h2 id="IPv6的特点"><a href="#IPv6的特点" class="headerlink" title="IPv6的特点"></a>IPv6的特点</h2><p>IPv6通过改进IPv4的缺点，减轻了管理员的负担。</p>
+<ul>
+<li>IP地址的扩大与路由控制表的聚合</li>
+<li>IP地址依然适应互联网分层构造。分配与其地址结构相适应的IP地址，尽可能避免路由表膨大</li>
+<li>性能提升</li>
+<li>支持即插即用功能，即使没有DHCP服务器也可以实现自动分配IP地址</li>
+<li>采用认证与加密功能，应对伪造IP地址的网络安全功能以及防止路线窃听的功能</li>
+<li>多播、Mobile IP称为扩展功能</li>
+</ul>
+<h2 id="IPv6在IP地址的标记方法"><a href="#IPv6在IP地址的标记方法" class="headerlink" title="IPv6在IP地址的标记方法"></a>IPv6在IP地址的标记方法</h2><p><strong>一般人们将128比特IP地址以每16为一组，每组用冒号“：”隔开进行标识。而且如果出现连续的0时还可以将这些0省略，并用两个冒号“：：”隔开，但是一个IP地址中只允许出现一次两个连续的冒号。</strong></p>
+<h2 id="IPv6分段处理"><a href="#IPv6分段处理" class="headerlink" title="IPv6分段处理"></a>IPv6分段处理</h2><p><strong>IPv6的分片处理只在作为起点的发送端主机上进行，路由器不参与分片。</strong>这也是为了减少路由器的负荷、提高网速。因此IPv6中的“路径MTU发现”功能必不可少。</p>
+<p><strong>不过IPv6中最小的MTU为1280字节，</strong>因此，在嵌入式系统中对于那些有一定系统资源限制的设备来说，不需要进行“路径MTU发现”，而是在发送IP包时直接以1280字节为单位分片发出。</p>
+<h1 id="IPv4首部"><a href="#IPv4首部" class="headerlink" title="IPv4首部"></a>IPv4首部</h1><p>通过IP进行通信时，需要在数据的前面加入IP首部信息。IP首部中包含用于IP协议进行发包控制时所有的必要信息。<img src="/posts/18937/TIM%E6%88%AA%E5%9B%BE20191025215451.png" alt></p>
+<ul>
+<li><strong>版本</strong>：由4比特构成，表示标识IP首部的版本号，IPv4的版本号为4，因此在这个字段上的值即为“4”，IPv6的版本号为6。</li>
+<li><strong>首部长度</strong>：由4比特构成，表明IP首部的大小，单位为4字节。对于没有可选项的IP包，首部长度则设置为5.</li>
+<li><strong>区分服务</strong>：由8比特构成，用来表明服务质量，如下表：<img src="/posts/18937/TIM%E6%88%AA%E5%9B%BE20191025215837.png" alt></li>
+<li><strong>DSCP段与ECN段</strong>：DSCP（差分服务代码点）是TOS的一部分，用来进行质量控制。ECn（显示拥塞通告）用来报告网络拥堵情况，由两个比特构成。</li>
+<li><strong>总长度</strong>：表示IP首部与数据部分合起来的总字节数，该字段长16比特，<strong>因此IP包的最大长度为65535字节。</strong></li>
+<li><strong>标识（ID）</strong>：由16比特构成，用于分片重组，同一个分片的标识值相同，不同分片的标识值不同。通常每发送一个IP包，它的值也逐渐递增。此外，即使ID相同，如果目标地址、源地址或协议不同的话，也会被认为是不同的分片。</li>
+<li><strong>标志</strong>：由3比特构成，标识包倍分片的相关信息。具体含义如下：<img src="/posts/18937/TIM%E6%88%AA%E5%9B%BE20191025220758.png" alt></li>
+<li><strong>片位移</strong>：由13比特构成，用来标识被分片的每一个分段相对于原始数据的位置。第一个分片对应的位置为0。</li>
+<li><strong>生存时间（TTL）</strong>：由8比特构成，最初意思是以秒为单位记录当前包在网络上应该生存的限期，实际中它是指可以中转多少个路由器的意思，每经过一个路由器，TTL就会减少1，直到变成0则丢弃包。TTl不会超过256，由此可以避免IP包在网络内无限传递的问题。</li>
+<li><strong>协议</strong>：由8比特构成，表示IP包传输层的上层协议编号。</li>
+<li><strong>首部校验和</strong>：由16比特构成，也叫IP首部校验和。盖子都安只校验数据报的首部，不校验数据部分。它主要用来确保IP数据报不被破坏。</li>
+<li><strong>源地址</strong>：由32比特构成，表示发送端IP地址。</li>
+<li><strong>目标地址</strong>：由32比特构成，表示接收端IP地址。</li>
+<li><strong>可选项</strong>：长度可变，通常只在进行实验或诊断时使用，包含信息有如下几点：安全级别、源路径、路径记录和时间戳。</li>
+<li><strong>填充</strong>：也称作填充物，在有可选项的情况下，首部长度可能不是32比特的整数倍，为此，通过向该字段填充0，调整为32比特的整数倍。</li>
+<li><strong>数据</strong>：存入数据。将IP上层协议的首部也为作为数据进行处理。</li>
+</ul>
+<h1 id="IPv6首部格式"><a href="#IPv6首部格式" class="headerlink" title="IPv6首部格式"></a>IPv6首部格式</h1><p>IPv6的IP数据首部格式相比IPv4已经发生巨大变化：<img src="/posts/18937/TIM%E6%88%AA%E5%9B%BE20191025221749.png" alt></p>
+<ul>
+<li><strong>版本</strong>：同IPv4一样。</li>
+<li><strong>通信量类</strong>：相当于IPv4的TOS字段。至今没什么用。</li>
+<li><strong>流标号</strong>：由20比特构成，准备用于服务质量控制，现在也没有用。只有流标号、源地址以及目标地址三项完全一致时，才被认为是一个流。</li>
+<li><strong>有效载荷长度</strong>：有效载荷是指包的数据部分，这里不包括首部，只表示数据部分的长度。</li>
+<li><strong>下一个首部</strong>：相当于IPv4的协议字段，由8比特构成。</li>
+<li><strong>跳数限制</strong>：由8比特构成，相当于IPv4的TTL。</li>
+<li><strong>源地址</strong>：由128比特构成，表示发送端IP地址。</li>
+<li><strong>目标地址</strong>：由128比特构成，表示接收端IP地址。</li>
+</ul>
+<p>IPv6的首部长度固定，无法将可选项加入其中，取而代之的是通过扩展首部对功能进行了有效扩展。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/13182/" rel="next" title="计算机网络基础知识">
+                <i class="fa fa-chevron-left"></i> 计算机网络基础知识
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Potato">
+            
+              <p class="site-author-name" itemprop="name">Potato</p>
+              <div class="site-description motion-element" itemprop="description">Although the road is endless and faraway, I still want to pursue the truth in the world.</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/Potato-xupt" title="GitHub &rarr; https://github.com/Potato-xupt" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:401242993@qq.com" title="E-Mail &rarr; mailto:401242993@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#IP相当于OSI参考模型的第3层"><span class="nav-number">1.</span> <span class="nav-text">IP相当于OSI参考模型的第3层</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IP基础知识"><span class="nav-number">2.</span> <span class="nav-text">IP基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#路由控制"><span class="nav-number">2.1.</span> <span class="nav-text">路由控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据链路的抽象化"><span class="nav-number">2.2.</span> <span class="nav-text">数据链路的抽象化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IP属于面向无连接型"><span class="nav-number">2.3.</span> <span class="nav-text">IP属于面向无连接型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IP地址基础知识"><span class="nav-number">3.</span> <span class="nav-text">IP地址基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IP地址的定义"><span class="nav-number">3.1.</span> <span class="nav-text">IP地址的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IP地址的组成"><span class="nav-number">3.2.</span> <span class="nav-text">IP地址的组成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IP地址的分类"><span class="nav-number">3.3.</span> <span class="nav-text">IP地址的分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#广播地址"><span class="nav-number">3.4.</span> <span class="nav-text">广播地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#子网掩码"><span class="nav-number">3.5.</span> <span class="nav-text">子网掩码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#路由控制-1"><span class="nav-number">4.</span> <span class="nav-text">路由控制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IP地址与路由控制"><span class="nav-number">4.1.</span> <span class="nav-text">IP地址与路由控制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IP分割处理与再构成处理"><span class="nav-number">5.</span> <span class="nav-text">IP分割处理与再构成处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IP报文的分片与重组"><span class="nav-number">5.1.</span> <span class="nav-text">IP报文的分片与重组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#路径MTU发现"><span class="nav-number">5.2.</span> <span class="nav-text">路径MTU发现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IPv6"><span class="nav-number">6.</span> <span class="nav-text">IPv6</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IPv6的特点"><span class="nav-number">6.1.</span> <span class="nav-text">IPv6的特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IPv6在IP地址的标记方法"><span class="nav-number">6.2.</span> <span class="nav-text">IPv6在IP地址的标记方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IPv6分段处理"><span class="nav-number">6.3.</span> <span class="nav-text">IPv6分段处理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IPv4首部"><span class="nav-number">7.</span> <span class="nav-text">IPv4首部</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IPv6首部格式"><span class="nav-number">8.</span> <span class="nav-text">IPv6首部格式</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+    <div id="sidebar-dimmer"></div>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Potato</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+<div>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_pv" style="display:none">
+    本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    <span class="post-meta-divider">|</span>
+</span>
+<span id="busuanzi_container_site_uv" style="display:none">
+    有<span id="busuanzi_value_site_uv"></span>人看过我的博客啦
+</span>
+</div>
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.2.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.2.0"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+
+  
+  <script src="/js/js.cookie.js?v=7.2.0"></script>
+  <script src="/js/scroll-cookie.js?v=7.2.0"></script>
+
+
+  
+
+  
+
+  
+
+
+  
+    
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '9b0c87d3c176c7c8ae2f',
+    clientSecret: 'c1a521ad426a42ab0a65b5d65a33e27303274435',
+    repo: 'comments',
+    owner: 'Potato-xupt',
+    admin: ['Potato-xupt'],
+    id: md5(location.pathname),
+    
+      language: window.navigator.language || window.navigator.userLanguage,
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
