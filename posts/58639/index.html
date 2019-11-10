@@ -94,25 +94,22 @@
 
 
 
-  <meta name="description" content="本章针对HTTP协议结构进行讲解，主要使用HTTP1.1版本，对HTTP协议的大概介绍，相关的详细细节在下一章讲解。">
+  <meta name="description" content="策略模式（Strategy Pattern），当你需要给朋友留下深刻的印象，或者想影响关键主管的策略时，请使用“这个”定义。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="HTTP协议介绍">
-<meta property="og:url" content="http://yoursite.com/posts/2668/index.html">
+<meta property="og:title" content="策略模式">
+<meta property="og:url" content="http://yoursite.com/posts/58639/index.html">
 <meta property="og:site_name" content="Potato Blog">
-<meta property="og:description" content="本章针对HTTP协议结构进行讲解，主要使用HTTP1.1版本，对HTTP协议的大概介绍，相关的详细细节在下一章讲解。">
+<meta property="og:description" content="策略模式（Strategy Pattern），当你需要给朋友留下深刻的印象，或者想影响关键主管的策略时，请使用“这个”定义。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/posts/2668/TIM%E6%88%AA%E5%9B%BE20191102163147.png">
-<meta property="og:image" content="http://yoursite.com/posts/2668/TIM%E6%88%AA%E5%9B%BE20191102210913.png">
-<meta property="og:image" content="http://yoursite.com/posts/2668/TIM%E6%88%AA%E5%9B%BE20191102210947.png">
-<meta property="og:image" content="http://yoursite.com/posts/2668/TIM%E6%88%AA%E5%9B%BE20191102214621.png">
-<meta property="og:image" content="http://yoursite.com/posts/2668/TIM%E6%88%AA%E5%9B%BE20191102215923.png">
-<meta property="og:image" content="http://yoursite.com/posts/2668/TIM%E6%88%AA%E5%9B%BE20191102215945.png">
-<meta property="og:image" content="http://yoursite.com/posts/2668/TIM%E6%88%AA%E5%9B%BE20191102221113.png">
-<meta property="og:updated_time" content="2019-11-02T14:22:32.900Z">
+<meta property="og:image" content="http://yoursite.com/posts/58639/cd1be8c2-755a-4a66-ad92-2e30f8f47922.png">
+<meta property="og:image" content="http://yoursite.com/posts/58639/TIM%E6%88%AA%E5%9B%BE20191110202641.png">
+<meta property="og:image" content="http://yoursite.com/posts/58639/TIM%E6%88%AA%E5%9B%BE20191110203519.png">
+<meta property="og:image" content="http://yoursite.com/posts/58639/TIM%E6%88%AA%E5%9B%BE20191110205838.png">
+<meta property="og:updated_time" content="2019-11-10T13:12:58.333Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="HTTP协议介绍">
-<meta name="twitter:description" content="本章针对HTTP协议结构进行讲解，主要使用HTTP1.1版本，对HTTP协议的大概介绍，相关的详细细节在下一章讲解。">
-<meta name="twitter:image" content="http://yoursite.com/posts/2668/TIM%E6%88%AA%E5%9B%BE20191102163147.png">
+<meta name="twitter:title" content="策略模式">
+<meta name="twitter:description" content="策略模式（Strategy Pattern），当你需要给朋友留下深刻的印象，或者想影响关键主管的策略时，请使用“这个”定义。">
+<meta name="twitter:image" content="http://yoursite.com/posts/58639/cd1be8c2-755a-4a66-ad92-2e30f8f47922.png">
 
 
 
@@ -122,7 +119,7 @@
 
   
   
-  <link rel="canonical" href="http://yoursite.com/posts/2668/">
+  <link rel="canonical" href="http://yoursite.com/posts/58639/">
 
 
 
@@ -132,7 +129,7 @@
   };
 </script>
 
-  <title>HTTP协议介绍 | Potato Blog</title>
+  <title>策略模式 | Potato Blog</title>
   
 
 
@@ -352,7 +349,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/2668/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/58639/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Potato">
@@ -369,7 +366,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">HTTP协议介绍
+          <h1 class="post-title" itemprop="name headline">策略模式
 
               
             
@@ -395,7 +392,7 @@
                 
               
 
-              <time title="创建时间：2019-11-02 16:16:03 / 修改时间：22:22:32" itemprop="dateCreated datePublished" datetime="2019-11-02T16:16:03+08:00">2019-11-02</time>
+              <time title="创建时间：2019-11-10 17:30:44 / 修改时间：21:12:58" itemprop="dateCreated datePublished" datetime="2019-11-10T17:30:44+08:00">2019-11-10</time>
             </span>
           
 
@@ -414,7 +411,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/计算机网络/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/设计模式/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a></span>
 
                 
                 
@@ -440,7 +437,7 @@
           
 
           
-            <div class="post-description">本章针对HTTP协议结构进行讲解，主要使用HTTP1.1版本，对HTTP协议的大概介绍，相关的详细细节在下一章讲解。</div>
+            <div class="post-description">策略模式（Strategy Pattern），当你需要给朋友留下深刻的印象，或者想影响关键主管的策略时，请使用“这个”定义。</div>
           
 
         </div>
@@ -456,86 +453,55 @@
       
 
       
-        <h1 id="通过请求和响应的交换达成通信"><a href="#通过请求和响应的交换达成通信" class="headerlink" title="通过请求和响应的交换达成通信"></a>通过请求和响应的交换达成通信</h1><p>HTTP协议规定，请求从客户端发出，最后服务器端响应该请求并返回，换句话说，肯定是先从客户端开始建立通信的，服务端在没有接收到接收到请求之前不会发送响应。下面是一个简单的例子：<img src="/posts/2668/TIM%E6%88%AA%E5%9B%BE20191102163147.png" alt></p>
-<p>下面是从客户端发送给某个HTTP服务器的请求报文中的内容</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET /index.htm HTTP/1.1</span><br><span class="line">Host:hackr.jp</span><br></pre></td></tr></table></figure>
+        <h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p><strong>策略模式定义了算法族，分别封装起来，让它们之间可以互相替换，此模式让算法的变化独立于使用算法的客户。</strong></p>
+<h1 id="结构图"><a href="#结构图" class="headerlink" title="结构图"></a>结构图</h1><p><img src="/posts/58639/cd1be8c2-755a-4a66-ad92-2e30f8f47922.png" alt></p>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><h2 id="实现鸭子的行为"><a href="#实现鸭子的行为" class="headerlink" title="实现鸭子的行为"></a>实现鸭子的行为</h2><p>考虑实现一个鸭子类，鸭子可能会有飞（Fly）和叫（Quack）的行为，所以先建立两个接口，分别代表飞的行为和叫的行为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">FlyBehavior</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fly</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><strong>起始行开头的GET表示请求访问服务器的类型，称为方法（method）。随后的字符串/index.htm指明了请求访问的资源对象，也叫做请求的URI。最后的HTTP/1.1即HTTP的版本号，用来提示客户端使用的HTTP协议功能。</strong>请求报文是由请求方法、请求URI、协议版本、可选的请求首部字段和内容实体构成的。</p>
-<p>综合来看，这段请求内容的意思是：请求访问某台HTTP服务器上的/index.htm页面资源。</p>
-<p>接收到请求的服务器，会将请求内容的处理结果以响应的形式返回。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK </span><br><span class="line">Date: Tue, 10 Jul 2012 06:50:15 GMT </span><br><span class="line">Content-Length: 362 </span><br><span class="line">Content-Type: text/html</span><br><span class="line"></span><br><span class="line">&lt;html&gt; </span><br><span class="line">……</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">QuackBehavior</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">quack</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><strong>在起始行开头的HTTP/1.1表示服务器对应的HTTP版本，紧挨着的200 OK表示请求的处理结果的状态码和原因短语。下一行显示了创建响应的日期时间，是首部字段内的一个属性。接着以一空行分隔，之后的内容称为资源实体的主体。</strong>响应报文基本上由协议版本、状态码、用以解释状态码的原因短语、可选的响应首部字段以及实体主体构成。</p>
-<h1 id="告知服务器意图的HTTP方法"><a href="#告知服务器意图的HTTP方法" class="headerlink" title="告知服务器意图的HTTP方法"></a>告知服务器意图的HTTP方法</h1><p>下面我们介绍合同HTTP/1.1中可使用的方法。</p>
-<h2 id="GET：获取资源"><a href="#GET：获取资源" class="headerlink" title="GET：获取资源"></a>GET：获取资源</h2><p><strong>GET方法用来请求访问已被URI识别的资源。指定的资源经服务器端解析后返回响应内容。</strong></p>
-<h2 id="POST：传输实体主体"><a href="#POST：传输实体主体" class="headerlink" title="POST：传输实体主体"></a>POST：传输实体主体</h2><p><strong>POST方法用来传输实体的主体。</strong></p>
-<p>虽然用GET方法也可以传输实体的主体，但一般不用GET方法进行传输，而是用POST方法。虽说POST的功能与GET很相似，但POST的主要目的并不是获取响应的主体内容。</p>
-<h2 id="PUT：传输文件"><a href="#PUT：传输文件" class="headerlink" title="PUT：传输文件"></a>PUT：传输文件</h2><p><strong>PUT方法用来传输文件。</strong>就像FTP协议的文件上传一样，要求在请求报文的主体中包含文件内容，然后保存到请求URI指定的位置。</p>
-<p>但是鉴于HTTP/1.1的PUT方法自身不带验证机制，任何人都可以上传文件，存在安全性问题，因此一般的Web网站不使用该方法。</p>
-<h2 id="HEAD：获得报文首部"><a href="#HEAD：获得报文首部" class="headerlink" title="HEAD：获得报文首部"></a>HEAD：获得报文首部</h2><p><strong>HEAD方法和GET方法一样，只是不返回报文主体部分。用于确认URI的有效性及资源更新的日期时间等。</strong></p>
-<h2 id="DELETE：删除文件"><a href="#DELETE：删除文件" class="headerlink" title="DELETE：删除文件"></a>DELETE：删除文件</h2><p><strong>DELETE方法用来删除文件，是与PUT相反的方法。DELETE方法按请求URI删除指定的资源。</strong></p>
-<p>但是HTTP/1.1的DELETE方法本身和PUT方法一样不带验证机制，所以一般的Web网站也不使用DELETE方法。</p>
-<h2 id="OPTIONS：询问支持的方法"><a href="#OPTIONS：询问支持的方法" class="headerlink" title="OPTIONS：询问支持的方法"></a>OPTIONS：询问支持的方法</h2><p><strong>OPTIONS方法用来查询针对请求URI指定的资源支持的方法。</strong></p>
-<h2 id="TRACE：追踪路径"><a href="#TRACE：追踪路径" class="headerlink" title="TRACE：追踪路径"></a>TRACE：追踪路径</h2><p><strong>TRACE方法是让Web服务器端将之前的请求通信返回给客户端的方法。</strong>发送请求时，在Max-Forwards首部字段中填入数值，每经过一个服务器端就将该数字减1，当数值刚好减到0时，就停止继续传输，最后接收到请求的服务器端则返回状态码200 OK的响应。</p>
-<p>客户端通过TRACE方法可以查询发送出去的请求是怎样被加工修改/篡改的。这是因为，请求想要连接到源目标服务器可能会通过代理中转，TRACE方法用来确认连接过程中发生的一系列操作。</p>
-<p>但是TRACE方法本来就不怎么常用，再加上它容易引发XST（跨站追踪）攻击，通常就更不会用到了。</p>
-<h2 id="CONNECT：要求用隧道协议连接代理"><a href="#CONNECT：要求用隧道协议连接代理" class="headerlink" title="CONNECT：要求用隧道协议连接代理"></a>CONNECT：要求用隧道协议连接代理</h2><p>CONNECT方法要求在与代理服务器通信时建立隧道，实现用隧道协议进行TCP通信。主要使用SSL和TLS协议把通信内容加密后经网络隧道传输。</p>
-<h1 id="持久连接节省通信量"><a href="#持久连接节省通信量" class="headerlink" title="持久连接节省通信量"></a>持久连接节省通信量</h1><p><strong>HTTP协议的初始化版本中，每进行一次HTTP通信就要断开一次TCP连接。这也就是短连接。</strong></p>
-<h2 id="持久连接（长连接）"><a href="#持久连接（长连接）" class="headerlink" title="持久连接（长连接）"></a>持久连接（长连接）</h2><p>为了解决TCP连接的问题，HTTP/1.1和一部分的HTTP/1.0想出了持久连接的方法，也就是长连接。</p>
-<p>持久连接的特点是，只要任意一端没有明确的提出断开连接，则保持TCP连接状态。</p>
-<p><strong>持久连接的好处在于减少了TCP连接的重复建立和断开所造成的额外开销，减轻了服务器端的负载。另外，减少开销的那部分时间，使HTTP请求和响应能够更早的结束，这样Web页面的显示速度也就相应提高了。</strong></p>
-<p>在HTTP/1.1中，所有的连接默认都是持久连接，但是在HTTP/1.0中并未标准化。虽然有一部分服务器通过非标准的手段实现了持久连接，但服务器端不一定能够支持持久连接。毫无疑问，除了服务器端，客户端也需要支持持久连接。</p>
-<h2 id="管线化"><a href="#管线化" class="headerlink" title="管线化"></a>管线化</h2><p><strong>持久连接是的多数请求以管线化方式发送成为可能。从前发送请求后需等待并收到响应，才能发送下一个请求。管线化技术出现后，不用等待响应亦可直接发送下一个请求。</strong></p>
-<p>这样就能够做到同时并行发送多个请求，而不需要一个接一个的等待响应了。</p>
-<h1 id="使用Cookie的状态管理"><a href="#使用Cookie的状态管理" class="headerlink" title="使用Cookie的状态管理"></a>使用Cookie的状态管理</h1><p>HTTP是无状态协议，它不对之前发生过的请求和响应的状态进行管理，也就是说，无法根据之前的状态进行本次的请求处理。</p>
-<p>不可否认，无状态协议当然有它的优点，由于不必保存状态，自然可减少服务器的CPU及内存资源的消耗。从另一侧面来说，也正是因为HTTP协议本身是非常简单的，所以才会被应用在各种场景里。</p>
-<p>保留无状态协议这个特征的同时又要解决类似的矛盾问题，于是引入了Cookie技术。Cookie技术通过在请求和响应报文中写入Cookie信息来控制客户端的状态。</p>
-<p><strong>Cookie会根据从服务器发送的响应报文内的一个叫做Set-Cookie的首部字段信息，通知客户端保存Cookie。当下次客户端再往服务器发送请求时，客户端会自动在请求报文中加入Cookie的值后发送出去。</strong></p>
-<p>服务端发现客户端发送过来的Cookie后，会去检查究竟是从哪一个客户端发来的请求，然后对比服务器上的记录，最后得到之前的状态信息。</p>
-<h1 id="HTTP报文"><a href="#HTTP报文" class="headerlink" title="HTTP报文"></a>HTTP报文</h1><p>用于HTTP协议交互的信息被称为HTTP报文。请求端（客户端）的HTTP报文叫做请求报文，响应端（服务器端）的叫做响应报文。HTTP报文本身是由多行数据构成的字符串文本。</p>
-<p><strong>HTTP报文大致可分为报文首部和报文主体两块。两者由最初出现的空行来划分。通常并不一定要有报文主体。</strong><img src="/posts/2668/TIM%E6%88%AA%E5%9B%BE20191102210913.png" alt></p>
-<h2 id="请求报文及响应报文的结构"><a href="#请求报文及响应报文的结构" class="headerlink" title="请求报文及响应报文的结构"></a>请求报文及响应报文的结构</h2><p>下面是请求报文和响应报文的结构：<br><img src="/posts/2668/TIM%E6%88%AA%E5%9B%BE20191102210947.png" alt></p>
-<p>请求报文和响应报文的首部内容由以下数据组成。</p>
-<ul>
-<li><strong>请求行</strong>：包含用于<strong>请求的方法</strong>，<strong>请求URI</strong>和<strong>HTTP版本</strong>。</li>
-<li><strong>状态行</strong>：包含表明<strong>响应结果的状态码</strong>，<strong>原因短语</strong>和<strong>HTTP版本</strong>。</li>
-<li><strong>首部字段</strong>：包含表示<strong>请求和响应的各种条件</strong>和<strong>属性的各类首部</strong>。一般有4种首部，分别是：<strong>通用首部、请求首部、响应首部和实体首部。</strong></li>
-<li><strong>其他</strong>：可能包含HTTP的RFC里未定义的首部，例如Cookie等。</li>
-</ul>
-<h1 id="编码提升传输速率"><a href="#编码提升传输速率" class="headerlink" title="编码提升传输速率"></a>编码提升传输速率</h1><h2 id="压缩传输的内容编码"><a href="#压缩传输的内容编码" class="headerlink" title="压缩传输的内容编码"></a>压缩传输的内容编码</h2><p>HTTP报文的主题用于传输请求或响应的实体主体。向待发送邮件内增加附件时，为了使邮件容量变小，我们会先用ZIP压缩文件之后再添加附件发送。HTTP协议中有一种被称为<strong>内容编码</strong>的功能也能进行类似的操作。</p>
-<p><strong>内容编码指明应用在实体内容上的编码格式，并保持实体信息原样压缩。内容编码后的实体由客户端接收并负责解码。</strong><br><img src="/posts/2668/TIM%E6%88%AA%E5%9B%BE20191102214621.png" alt><br>常用的内容编码有以下几种：</p>
-<ul>
-<li>gzip（GUN zip）</li>
-<li>compress（UNIX系统的标准压缩）</li>
-<li>deflate（zlib）</li>
-<li>identity（不进行编码）</li>
-</ul>
-<h2 id="分割发送的分块传输编码"><a href="#分割发送的分块传输编码" class="headerlink" title="分割发送的分块传输编码"></a>分割发送的分块传输编码</h2><p>在HTTP通信过程中，请求的编码实体资源尚未全部传输完成之前，浏览器无法显示请求页面。在传输大容量数据时，通过把数据分割成多块，能够让浏览器逐步显示页面。</p>
-<p>这种把实体主体分块的功能称为<strong>分块传输编码</strong>。<strong>分块传输编码会将实体主体分成多个部分（块）。每一块都会用十六进制来标记块的大小，而实体主体的最后一块会使用“0（CR+LF）”来标记。</strong></p>
-<p><strong>使用分块传输编码的实体主体由接收的客户端负责解码，恢复到编码前的实体主体。</strong>在HTTP/1.1中存在一种称为传输编码的机制，它可以在通信时按某种编码方式传输，但只定义作用于分块传输编码中。</p>
-<h1 id="发送多种数据的多部分对象集合"><a href="#发送多种数据的多部分对象集合" class="headerlink" title="发送多种数据的多部分对象集合"></a>发送多种数据的多部分对象集合</h1><p>发送邮件时，我们可以在邮件里写入文字并添加多份附件。这是因为采用了MIME机制，它允许邮件处理文本、图片、视频等多种不同类型的数据。相应的HTTP协议中也采纳了多部分对象集合，发送的一份报文主体内可含有多类型实体。通常是在图片或文本文件等上传时使用。</p>
-<p>多部分对象集合包含的对象如下：</p>
-<ul>
-<li><strong>multipart/form-data</strong>：在Web表单文件上传时。<img src="/posts/2668/TIM%E6%88%AA%E5%9B%BE20191102215923.png" alt></li>
-<li><strong>multipart/byteranges</strong>：状态码206（Partial Content，部分内容）响应报文包含了多个范围的内容时使用。<img src="/posts/2668/TIM%E6%88%AA%E5%9B%BE20191102215945.png" alt></li>
-</ul>
-<p><strong>在HTTP报文中使用多部分对象集合时，需要在首部字段里加上Content-type。使用boundary字符串来划分多部分对象集合指明的各类实体。在boundary字符串指定的各个实体的起始行之前插入“–”标记，而在多部分对象集合对应的字符串最后插入“–”标记作为结束。</strong></p>
-<p>多部分对象集合的每个部分类型中，都可以含有首部字段。另外可以在某个部分中嵌套使用多部份对象集合。</p>
-<h1 id="获取部分内容的范围请求"><a href="#获取部分内容的范围请求" class="headerlink" title="获取部分内容的范围请求"></a>获取部分内容的范围请求</h1><p>HTTP实现了为需要指定下载的实体范围。像这样，指定范围发送的请求叫做<strong>范围请求</strong>。对一份10000字节大小的资源，如果使用范围请求，可以只请求5001-10000字节内的资源。<img src="/posts/2668/TIM%E6%88%AA%E5%9B%BE20191102221113.png" alt></p>
-<p>执行范围请求时，会用到首部字段Range来指定资源的byte范围。byte范围的指定形式如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">5001~10 000 字节</span><br><span class="line">Range: bytes=5001-10000</span><br><span class="line"></span><br><span class="line">从 5001 字节之后全部的</span><br><span class="line">Range: bytes=5001</span><br><span class="line"></span><br><span class="line">从一开始到 3000 字节和 5000~7000 字节的多重范围</span><br><span class="line">Range: bytes=-3000, 5000-7000</span><br></pre></td></tr></table></figure>
+<p>然后建立它们对应的类，负责实现具体的行为.</p>
+<p>例如飞行的行为有用翅膀飞行，也可以是不会飞：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FlyWithWings</span> <span class="keyword">implements</span> <span class="title">FlyBehavior</span> </span>&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fly</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"I'm flying"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><strong>针对范围请求，响应会返回状态码206 Partial Content的响应报文。另外，对于多重范围的范围请求，响应会在首部字段Content-Type标明multipart/byteranges后返回响应报文。</strong></p>
-<p><strong>如果服务器端无法响应范围请求，则会返回状态码200 OK和完整的实体内容。</strong></p>
-<h1 id="内容协商返回最合适的内容。"><a href="#内容协商返回最合适的内容。" class="headerlink" title="内容协商返回最合适的内容。"></a>内容协商返回最合适的内容。</h1><p><strong>内容协商机制是指客户端和服务器端就响应的资源内容进行交涉，然后提供给客户端最为合适的资源。内容协商会以语言、字符集、编码方式等为基准判断响应的资源。</strong></p>
-<p>包含在请求报文中的某些首部字段就是判断的基准：</p>
-<ul>
-<li>Accept</li>
-<li>Accept-Charset</li>
-<li>Accept-Encoding</li>
-<li>Accept-Language</li>
-<li>Content-Language</li>
-</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FlyNoway</span> <span class="keyword">implements</span> <span class="title">FlyBehavior</span></span>&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fly</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"Sorry,I can't fly."</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在叫的行为中，可能是呱呱叫，也可能是吱吱叫，也可能是不会叫：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Quack</span> <span class="keyword">implements</span> <span class="title">QuackBehavior</span></span>&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">quack</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"Quack!"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Squeak</span> <span class="keyword">implements</span> <span class="title">QuackBehavior</span></span>&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">quack</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"Squeak"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MuteQuack</span> <span class="keyword">implements</span> <span class="title">QuackBehavior</span></span>&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">quack</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"&lt;&lt;&gt;Silence&gt;"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此时，该类的结构图就是这样了：<img src="/posts/58639/TIM%E6%88%AA%E5%9B%BE20191110202641.png" alt></p>
+<p><strong>这样的设计，可以让飞行和呱呱叫的动作被其他的对象复用，因为这些行为已经与鸭子类无关了，这么一来，有了继承的“复用”好处，但是却没有继承所带来的包袱。而我们新增一些行为，不会影响到既有的行为类，也不会影响“使用”到飞行行为的鸭子类。</strong></p>
+<h2 id="整合鸭子的行为"><a href="#整合鸭子的行为" class="headerlink" title="整合鸭子的行为"></a>整合鸭子的行为</h2><p>关键在于，鸭子现在将会飞行和呱呱叫的动作“委托”别人处理，而不是使用定义在Duck类（或子类）内的呱呱叫和飞行方法。做法是这样的：</p>
+<ol>
+<li>首先，声明一个Duck类，在Duck类中加入两个实例变量，分别为：flyBehavior与quackBehavior。声明为接口类型，每个鸭子对象都会动态的设置这些变量以在运行时引用正确的类型。<img src="/posts/58639/TIM%E6%88%AA%E5%9B%BE20191110203519.png" alt></li>
+<li>现在来实现performQuack()和performFly()这两个方法：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Duck</span> </span>&#123;</span><br><span class="line">	FlyBehavior flyBehavior;</span><br><span class="line">	QuackBehavior quackBehavior;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">performFly</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		flyBehavior.fly();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">performQuack</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		quackBehavior.quack();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>想进行呱呱叫的动作，Duck对象只要交quackBehavior对象去呱呱叫就行了，想要飞的行为，只要叫flyBehavior对象<br>去飞就行了。<strong>我们不在乎接口的对象到底是什么，我们只关心该对象知道如何进行呱呱叫就够了。</strong></p>
+<h2 id="动态行为设定"><a href="#动态行为设定" class="headerlink" title="动态行为设定"></a>动态行为设定</h2><p>假设我们想在鸭子子类中通过“设定方法”来设定鸭子的行为，而不是在鸭子的构造期内实例化，所以：</p>
+<ol>
+<li>在Duck类中，加入两个新方法，和一些其他的行为方法：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Duck</span> </span>&#123;</span><br><span class="line">	FlyBehavior flyBehavior;</span><br><span class="line">	QuackBehavior quackBehavior;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setFlyBehavior</span><span class="params">(FlyBehavior flyBehavior)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.flyBehavior = flyBehavior;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setQuackBehavior</span><span class="params">(QuackBehavior quackBehavior)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.quackBehavior = quackBehavior;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">display</span><span class="params">()</span></span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">performFly</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		flyBehavior.fly();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">performQuack</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		quackBehavior.quack();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">swim</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"All ducks float,even decoys!"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>从此以后，我们可以“随时”调用setFlyBehavior()和setQuackBehavior()这两个方法改变鸭子的行为。</p>
+<h2 id="查看结果"><a href="#查看结果" class="headerlink" title="查看结果"></a>查看结果</h2><p>创造一个新的鸭子类型：模型鸭,其中一开始我们的鸭子是不会飞也不会叫的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ModelDuck</span> <span class="keyword">extends</span> <span class="title">Duck</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">ModelDuck</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		flyBehavior = <span class="keyword">new</span> FlyNoway();</span><br><span class="line">		quackBehavior = <span class="keyword">new</span> Quack();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">display</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"I'm a model duck"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是在运行中，我们如果想要改变它的行为，让它变成会飞且会呱呱叫的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		Duck model = <span class="keyword">new</span> ModelDuck();</span><br><span class="line">		model.performFly();</span><br><span class="line">		model.performQuack();</span><br><span class="line">		model.display();</span><br><span class="line">		</span><br><span class="line">		System.out.println(<span class="string">"替换策略后......."</span>);</span><br><span class="line">		</span><br><span class="line">		model.setFlyBehavior(<span class="keyword">new</span> FlyWithWings());</span><br><span class="line">		model.setQuackBehavior(<span class="keyword">new</span> Squeak());</span><br><span class="line">		model.performFly();</span><br><span class="line">		model.performQuack();</span><br><span class="line">		model.display();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出的结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Sorry,I can&apos;t fly.</span><br><span class="line">&lt;&lt;Silence&gt;&gt;</span><br><span class="line">I&apos;m a model duck</span><br><span class="line">替换策略后.......</span><br><span class="line">I&apos;m flying</span><br><span class="line">Squeak</span><br><span class="line">I&apos;m a model duck</span><br></pre></td></tr></table></figure>
+
+<h2 id="整体结构"><a href="#整体结构" class="headerlink" title="整体结构"></a>整体结构</h2><p>此时整体的格局如下：<img src="/posts/58639/TIM%E6%88%AA%E5%9B%BE20191110205838.png" alt></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>我们把描述事情的方式稍有改变，不再把鸭子的行为说成是“一组行为”，我们开始把行为想成是“一族算法”，现在回到策略模式的定义上面再看就豁然开朗：</p>
+<p><strong>策略模式定义了算法族，分别封装起来，让它们之间可以互相替换，此模式让算法的变化独立于使用算法的客户。</strong></p>
 
       
     </div>
@@ -566,8 +532,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/6245/" rel="next" title="TCP与UDP">
-                <i class="fa fa-chevron-left"></i> TCP与UDP
+              <a href="/posts/47572/" rel="next" title="海量数据处理">
+                <i class="fa fa-chevron-left"></i> 海量数据处理
               </a>
             
           </div>
@@ -575,10 +541,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/posts/62018/" rel="prev" title="HTTP详解">
-                HTTP详解 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -757,7 +719,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#通过请求和响应的交换达成通信"><span class="nav-number">1.</span> <span class="nav-text">通过请求和响应的交换达成通信</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#告知服务器意图的HTTP方法"><span class="nav-number">2.</span> <span class="nav-text">告知服务器意图的HTTP方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GET：获取资源"><span class="nav-number">2.1.</span> <span class="nav-text">GET：获取资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#POST：传输实体主体"><span class="nav-number">2.2.</span> <span class="nav-text">POST：传输实体主体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PUT：传输文件"><span class="nav-number">2.3.</span> <span class="nav-text">PUT：传输文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HEAD：获得报文首部"><span class="nav-number">2.4.</span> <span class="nav-text">HEAD：获得报文首部</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DELETE：删除文件"><span class="nav-number">2.5.</span> <span class="nav-text">DELETE：删除文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OPTIONS：询问支持的方法"><span class="nav-number">2.6.</span> <span class="nav-text">OPTIONS：询问支持的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TRACE：追踪路径"><span class="nav-number">2.7.</span> <span class="nav-text">TRACE：追踪路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CONNECT：要求用隧道协议连接代理"><span class="nav-number">2.8.</span> <span class="nav-text">CONNECT：要求用隧道协议连接代理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#持久连接节省通信量"><span class="nav-number">3.</span> <span class="nav-text">持久连接节省通信量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#持久连接（长连接）"><span class="nav-number">3.1.</span> <span class="nav-text">持久连接（长连接）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#管线化"><span class="nav-number">3.2.</span> <span class="nav-text">管线化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用Cookie的状态管理"><span class="nav-number">4.</span> <span class="nav-text">使用Cookie的状态管理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP报文"><span class="nav-number">5.</span> <span class="nav-text">HTTP报文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#请求报文及响应报文的结构"><span class="nav-number">5.1.</span> <span class="nav-text">请求报文及响应报文的结构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编码提升传输速率"><span class="nav-number">6.</span> <span class="nav-text">编码提升传输速率</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#压缩传输的内容编码"><span class="nav-number">6.1.</span> <span class="nav-text">压缩传输的内容编码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分割发送的分块传输编码"><span class="nav-number">6.2.</span> <span class="nav-text">分割发送的分块传输编码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#发送多种数据的多部分对象集合"><span class="nav-number">7.</span> <span class="nav-text">发送多种数据的多部分对象集合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#获取部分内容的范围请求"><span class="nav-number">8.</span> <span class="nav-text">获取部分内容的范围请求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内容协商返回最合适的内容。"><span class="nav-number">9.</span> <span class="nav-text">内容协商返回最合适的内容。</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#定义"><span class="nav-number">1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结构图"><span class="nav-number">2.</span> <span class="nav-text">结构图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现"><span class="nav-number">3.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实现鸭子的行为"><span class="nav-number">3.1.</span> <span class="nav-text">实现鸭子的行为</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#整合鸭子的行为"><span class="nav-number">3.2.</span> <span class="nav-text">整合鸭子的行为</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态行为设定"><span class="nav-number">3.3.</span> <span class="nav-text">动态行为设定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看结果"><span class="nav-number">3.4.</span> <span class="nav-text">查看结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#整体结构"><span class="nav-number">3.5.</span> <span class="nav-text">整体结构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
